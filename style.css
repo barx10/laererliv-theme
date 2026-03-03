@@ -135,6 +135,9 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .download-icon.pdf { color: #C0392B; border-color: #E8C8C4; background: #FDF5F4; }
 .download-icon.doc { color: #2471A3; border-color: #C4D8E8; background: #F4F8FD; }
 .download-icon.pptx { color: #C0612B; border-color: #E8D4C4; background: #FDF8F4; }
+.download-thumb { width: 80px; height: 100px; overflow: hidden; flex-shrink: 0; }
+.download-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s ease; }
+.download-item:hover .download-thumb img { transform: scale(1.05); }
 .download-tag { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 0.5rem; }
 .download-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; line-height: 1.3; margin-bottom: 0.5rem; color: var(--ink); transition: color 0.2s; }
 .download-item:hover .download-title { color: var(--forest); }
@@ -153,6 +156,9 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .app-card.hiding { opacity: 0; transform: scale(0.96); pointer-events: none; height: 0; padding: 0; border-color: transparent; overflow: hidden; }
 .app-icon { width: 56px; height: 56px; background: var(--cream); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem; font-size: 1.5rem; transition: transform 0.25s ease, background 0.25s ease; }
 .app-card:hover .app-icon { transform: scale(1.1); background: var(--paper); }
+.app-thumb { width: 100%; aspect-ratio: 16/9; overflow: hidden; margin-bottom: 0.5rem; }
+.app-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+.app-card:hover .app-thumb img { transform: scale(1.04); }
 .app-tag { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
 .app-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 400; line-height: 1.3; transition: color 0.2s; }
 .app-card:hover .app-title { color: var(--forest); }
@@ -162,7 +168,11 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 
 .publications-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .publications-list { list-style: none; }
-.pub-item { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; padding: 2rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease, opacity 0.5s ease, transform 0.5s ease; }
+.pub-item { display: grid; grid-template-columns: auto 1fr auto; gap: 2rem; align-items: center; padding: 2rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease, opacity 0.5s ease, transform 0.5s ease; }
+.pub-item:not(:has(.pub-thumb)) { grid-template-columns: 1fr auto; }
+.pub-thumb { width: 64px; height: 80px; overflow: hidden; flex-shrink: 0; }
+.pub-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.25s ease; }
+.pub-item:hover .pub-thumb img { transform: scale(1.05); }
 .pub-item:first-child { border-top: 1px solid var(--border); }
 .pub-item:hover { background: var(--cream); }
 .pub-item.hiding { opacity: 0; transform: translateY(8px); pointer-events: none; height: 0; padding: 0 2rem; border-color: transparent; overflow: hidden; }
@@ -345,8 +355,9 @@ nav.main-nav.open a {
   .downloads-section, .apps-section, .publications-section, .about-section { padding-left: 1.5rem; padding-right: 1.5rem; }
   .page-header--tall { min-height: 30vh; }
   .download-item { grid-template-columns: 1fr; gap: 1rem; padding: 2rem 1rem; margin: 0 -1rem; }
-  .download-icon { display: none; }
-  .pub-item { padding: 1.5rem 1rem; margin: 0 -1rem; }
+  .download-icon, .download-thumb { display: none; }
+  .pub-item { grid-template-columns: 1fr auto !important; padding: 1.5rem 1rem; margin: 0 -1rem; }
+  .pub-thumb { display: none; }
   .filter-inner { padding: 0 1.5rem; overflow-x: auto; }
   .about-sidebar { grid-template-columns: 1fr; }
 }

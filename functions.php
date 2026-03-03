@@ -22,6 +22,7 @@ function laererliv_setup() {
     add_image_size( 'featured-large', 800, 600, true );
     add_image_size( 'post-card', 600, 375, true );
     add_image_size( 'hero-portrait', 800, 1200, true );
+    add_image_size( 'cpt-thumb', 160, 120, true );
 }
 add_action( 'after_setup_theme', 'laererliv_setup' );
 
@@ -101,7 +102,7 @@ function laererliv_register_post_types() {
         'public'       => true,
         'has_archive'  => false,
         'menu_icon'    => 'dashicons-media-document',
-        'supports'     => array( 'title', 'custom-fields' ),
+        'supports'     => array( 'title', 'thumbnail', 'custom-fields' ),
         'show_in_rest' => true,
     ) );
 }

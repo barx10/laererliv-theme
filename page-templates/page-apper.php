@@ -40,7 +40,11 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
         $cat_name_app = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
     ?>
     <div class="app-card" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="animation-delay:<?php echo 0.6 + $app_index * 0.08; ?>s">
-      <div class="app-icon"><?php echo esc_html( $emoji ?: '&#128279;' ); ?></div>
+      <?php if ( has_post_thumbnail() ) : ?>
+        <div class="app-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
+      <?php else : ?>
+        <div class="app-icon"><?php echo esc_html( $emoji ?: '🔗' ); ?></div>
+      <?php endif; ?>
       <?php if ( $cat_name_app ) : ?><span class="app-tag"><?php echo esc_html( $cat_name_app ); ?></span><?php endif; ?>
       <h3 class="app-title"><?php the_title(); ?></h3>
       <p class="app-desc"><?php echo wp_trim_words( get_the_content(), 25 ); ?></p>

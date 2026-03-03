@@ -43,6 +43,9 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
         $kilde_name = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->name : '';
     ?>
     <li class="pub-item reveal" data-category="<?php echo esc_attr( $kilde_slug ); ?>" style="transition-delay:<?php echo $pub_index * 0.07; ?>s">
+      <?php if ( has_post_thumbnail() ) : ?>
+        <div class="pub-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
+      <?php endif; ?>
       <div>
         <?php if ( $kilde_name ) : ?><p class="pub-source"><?php echo esc_html( $kilde_name ); ?></p><?php endif; ?>
         <p class="pub-title">

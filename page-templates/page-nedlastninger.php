@@ -43,9 +43,11 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
         $icon_class = strtolower( $filtype );
     ?>
     <li class="download-item reveal" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="transition-delay:<?php echo $dl_index * 0.07; ?>s">
-      <div class="download-icon <?php echo esc_attr( $icon_class ); ?>">
-        <?php echo esc_html( strtoupper( $filtype ?: 'PDF' ) ); ?>
-      </div>
+      <?php if ( has_post_thumbnail() ) : ?>
+        <div class="download-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
+      <?php else : ?>
+        <div class="download-icon <?php echo esc_attr( $icon_class ); ?>"><?php echo esc_html( strtoupper( $filtype ?: 'PDF' ) ); ?></div>
+      <?php endif; ?>
       <div class="download-body">
         <?php if ( $cat_name_dl ) : ?><p class="download-tag"><?php echo esc_html( $cat_name_dl ); ?></p><?php endif; ?>
         <h3 class="download-title"><?php the_title(); ?></h3>
