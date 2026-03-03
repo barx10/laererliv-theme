@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Scroll wheel
   mask.addEventListener('wheel', function (e) {
     e.preventDefault();
+    if (Math.abs(e.deltaY) < 50) return;
     var direction = e.deltaY > 0 ? 1 : -1;
     selectYear(currentIndex + direction);
   }, { passive: false });
