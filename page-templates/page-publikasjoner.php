@@ -28,9 +28,12 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
 <?php endif; ?>
 
 <section class="publications-section">
+
+  <?php
+  $pubs = new WP_Query( array( 'post_type' => 'publikasjon', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC' ) );
+  if ( $pubs->have_posts() ) : ?>
   <ul class="publications-list">
     <?php
-    $pubs = new WP_Query( array( 'post_type' => 'publikasjon', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC' ) );
     $pub_index = 0;
     while ( $pubs->have_posts() ) : $pubs->the_post();
         $url     = get_post_meta( get_the_ID(), '_pub_url', true );
@@ -55,6 +58,22 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
     </li>
     <?php $pub_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
+  <?php endif; ?>
+
+  <?php
+  while ( have_posts() ) : the_post();
+    $page_content = get_the_content();
+    if ( $page_content ) : ?>
+  <div class="pub-page-content reveal">
+    <div class="section-divider">
+      <p class="section-divider-label">Podkast</p>
+    </div>
+    <div class="pub-embeds">
+      <?php the_content(); ?>
+    </div>
+  </div>
+  <?php endif; endwhile; ?>
+
 </section>
 
 <?php get_footer(); ?>

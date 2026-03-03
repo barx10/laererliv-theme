@@ -175,6 +175,12 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .pub-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s, gap 0.25s; }
 .pub-link:hover { color: var(--gold); }
 
+.section-divider { display: flex; align-items: center; gap: 1.5rem; padding: 4rem 0 2rem; }
+.section-divider-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); font-weight: 500; white-space: nowrap; }
+.section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.pub-embeds { display: flex; flex-direction: column; gap: 2rem; padding-bottom: 4rem; }
+.pub-embeds iframe, .pub-embeds embed, .pub-embeds object { max-width: 100%; border-radius: 0; }
+
 .about-section { max-width: 1400px; margin: 0 auto; padding: 5rem 3rem 8rem; }
 .about-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 6rem; align-items: start; }
 .about-body { max-width: 700px; }
