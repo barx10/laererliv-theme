@@ -4,20 +4,20 @@
  */
 get_header(); ?>
 
-<div class="page-header">
+<div class="page-header page-header--tall">
   <div class="page-header-inner">
     <div>
-      <p class="page-eyebrow">Ressurser</p>
-      <h1 class="page-title">Ned&shy;lastninger</h1>
+      <p class="page-eyebrow page-anim" style="animation-delay:.1s">Ressurser</p>
+      <h1 class="page-title page-anim" style="animation-delay:.25s">Ned&shy;lastninger</h1>
     </div>
-    <p class="page-intro">Boeker, artikler og undervisningsmateriell til fri nedlasting.</p>
+    <p class="page-intro page-anim" style="animation-delay:.4s">Boeker, artikler og undervisningsmateriell til fri nedlasting.</p>
   </div>
 </div>
 
 <?php
 $dl_cats = get_terms( array( 'taxonomy' => 'nedlastning_kategori', 'hide_empty' => true ) );
 if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
-<div class="filter-bar">
+<div class="filter-bar page-anim" style="animation-delay:.5s">
   <div class="filter-inner">
     <button class="filter-btn active" data-filter="alle">Alle</button>
     <?php foreach ( $dl_cats as $cat ) : ?>
@@ -31,6 +31,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
   <ul class="downloads-list">
     <?php
     $downloads = new WP_Query( array( 'post_type' => 'nedlastning', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
+    $dl_index = 0;
     while ( $downloads->have_posts() ) : $downloads->the_post();
         $filtype  = get_post_meta( get_the_ID(), '_nedlastning_filtype', true );
         $filstr   = get_post_meta( get_the_ID(), '_nedlastning_filstr', true );
@@ -41,11 +42,11 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
         $cat_name_dl = ( $dl_terms && ! is_wp_error( $dl_terms ) ) ? $dl_terms[0]->name : '';
         $icon_class = strtolower( $filtype );
     ?>
-    <li class="download-item" data-category="<?php echo esc_attr( $cat_slug ); ?>">
+    <li class="download-item reveal" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="transition-delay:<?php echo $dl_index * 0.07; ?>s">
       <div class="download-icon <?php echo esc_attr( $icon_class ); ?>">
         <?php echo esc_html( strtoupper( $filtype ?: 'PDF' ) ); ?>
       </div>
-      <div>
+      <div class="download-body">
         <?php if ( $cat_name_dl ) : ?><p class="download-tag"><?php echo esc_html( $cat_name_dl ); ?></p><?php endif; ?>
         <h3 class="download-title"><?php the_title(); ?></h3>
         <p class="download-desc"><?php echo wp_trim_words( get_the_content(), 30 ); ?></p>
@@ -64,7 +65,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
         <?php endif; ?>
       </div>
     </li>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php $dl_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
 </section>
 

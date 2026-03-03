@@ -39,6 +39,36 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // FILTER BAR (nedlastninger, apper, etc.)
+  // ========================================
+  var filterBtns = document.querySelectorAll('.filter-btn');
+  if (filterBtns.length) {
+    filterBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var parent = btn.closest('.filter-bar');
+        parent.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+
+        var filter = btn.getAttribute('data-filter');
+        var section = parent.nextElementSibling;
+        if (!section) return;
+
+        var items = section.querySelectorAll('[data-category]');
+        items.forEach(function (item, i) {
+          var matches = filter === 'alle' || item.getAttribute('data-category') === filter;
+          if (matches) {
+            item.classList.remove('hiding');
+            item.style.transitionDelay = (i * 0.04) + 's';
+          } else {
+            item.classList.add('hiding');
+            item.style.transitionDelay = '0s';
+          }
+        });
+      });
+    });
+  }
+
+  // ========================================
   // YEAR WHEEL (arkiv)
   // ========================================
   var wheel = document.getElementById('year-wheel');
