@@ -315,6 +315,152 @@ function laererliv_is_page_template_slug( $slug ) {
 }
 
 // ========================================
+// CUSTOMIZER
+// ========================================
+function laererliv_customize_register( $wp_customize ) {
+
+    // --- Hero-seksjon ---
+    $wp_customize->add_section( 'laererliv_hero', array(
+        'title'    => 'Hero / Landingsside',
+        'priority' => 30,
+    ) );
+
+    // Eyebrow
+    $wp_customize->add_setting( 'laererliv_hero_eyebrow', array(
+        'default'           => 'Fra klasserom til storsamfunn',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_eyebrow', array(
+        'label'   => 'Eyebrow-tekst',
+        'section' => 'laererliv_hero',
+        'type'    => 'text',
+    ) );
+
+    // Overskrift
+    $wp_customize->add_setting( 'laererliv_hero_headline', array(
+        'default'           => 'Tanker om <em>skole</em>, teknologi og alt imellom',
+        'sanitize_callback' => 'wp_kses_post',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_headline', array(
+        'label'       => 'Overskrift (bruk <em> for kursiv)',
+        'section'     => 'laererliv_hero',
+        'type'        => 'textarea',
+    ) );
+
+    // Undertekst
+    $wp_customize->add_setting( 'laererliv_hero_sub', array(
+        'default'           => 'Kenneth Bareksten skriver om undervisning, digital kompetanse og hva som skjer naar laerere tar pennen.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_sub', array(
+        'label'   => 'Undertekst',
+        'section' => 'laererliv_hero',
+        'type'    => 'textarea',
+    ) );
+
+    // CTA-tekst
+    $wp_customize->add_setting( 'laererliv_hero_cta_text', array(
+        'default'           => 'Les innleggene',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_cta_text', array(
+        'label'   => 'CTA-knapp tekst',
+        'section' => 'laererliv_hero',
+        'type'    => 'text',
+    ) );
+
+    // CTA-lenke
+    $wp_customize->add_setting( 'laererliv_hero_cta_url', array(
+        'default'           => '#featured',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_cta_url', array(
+        'label'   => 'CTA-knapp lenke',
+        'section' => 'laererliv_hero',
+        'type'    => 'url',
+    ) );
+
+    // Hero-bilde
+    $wp_customize->add_setting( 'laererliv_hero_image', array(
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'laererliv_hero_image', array(
+        'label'   => 'Portrettbilde',
+        'section' => 'laererliv_hero',
+    ) ) );
+
+    // Navn under portrett
+    $wp_customize->add_setting( 'laererliv_hero_name', array(
+        'default'           => 'Kenneth Bareksten',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_name', array(
+        'label'   => 'Navn (under portrett)',
+        'section' => 'laererliv_hero',
+        'type'    => 'text',
+    ) );
+
+    // Rolle under portrett
+    $wp_customize->add_setting( 'laererliv_hero_role', array(
+        'default'           => 'Lektor · Skribent · Foredragsholder',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_hero_role', array(
+        'label'   => 'Rolle (under portrett)',
+        'section' => 'laererliv_hero',
+        'type'    => 'text',
+    ) );
+
+    // --- Seksjonsoverskrifter ---
+    $wp_customize->add_section( 'laererliv_sections', array(
+        'title'    => 'Seksjonsoverskrifter',
+        'priority' => 31,
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_featured_label', array(
+        'default'           => 'Siste innlegg',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_featured_label', array(
+        'label'   => 'Label over siste innlegg',
+        'section' => 'laererliv_sections',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_random_heading', array(
+        'default'           => 'Tilfeldig utvalg',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_random_heading', array(
+        'label'   => 'Overskrift tilfeldig utvalg',
+        'section' => 'laererliv_sections',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_archive_heading', array(
+        'default'           => 'Arkiv',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_archive_heading', array(
+        'label'   => 'Overskrift arkiv',
+        'section' => 'laererliv_sections',
+        'type'    => 'text',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_archive_years_label', array(
+        'default'           => 'Velg aar',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_archive_years_label', array(
+        'label'   => 'Label over årsvalg',
+        'section' => 'laererliv_sections',
+        'type'    => 'text',
+    ) );
+}
+add_action( 'customize_register', 'laererliv_customize_register' );
+
+// ========================================
 // ADMIN: SORTERINGSREKKEFØLGE FOR CPT
 // ========================================
 function laererliv_cpt_order( $query ) {

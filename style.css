@@ -80,10 +80,18 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 .archive-section { max-width: 1400px; margin: 0 auto; padding: 5rem 3rem 8rem; display: grid; grid-template-columns: 160px 1fr; gap: 5rem; align-items: start; }
 .archive-years { position: sticky; top: 80px; }
 .archive-years-label { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 1.5rem; }
-.year-list { list-style: none; }
-.year-btn { display: block; width: 100%; text-align: left; background: none; border: none; border-bottom: 1px solid transparent; cursor: pointer; padding: 0.5rem 0; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 400; color: var(--border); transition: color 0.25s; letter-spacing: -0.02em; line-height: 1.2; }
+.year-wheel-wrapper { position: relative; user-select: none; }
+.year-wheel-mask { position: relative; height: 240px; overflow: hidden; cursor: grab; }
+.year-wheel-mask:active { cursor: grabbing; }
+.year-wheel-mask::before,
+.year-wheel-mask::after { content: ''; position: absolute; left: 0; right: 0; height: 60px; z-index: 2; pointer-events: none; }
+.year-wheel-mask::before { top: 0; background: linear-gradient(to bottom, var(--paper), transparent); }
+.year-wheel-mask::after { bottom: 0; background: linear-gradient(to top, var(--paper), transparent); }
+.year-wheel-highlight { position: absolute; top: 90px; left: 0; right: 0; height: 60px; border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold); z-index: 1; pointer-events: none; }
+.year-list { list-style: none; transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1); will-change: transform; }
+.year-btn { display: block; width: 100%; text-align: center; background: none; border: none; cursor: pointer; padding: 0; font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 400; color: var(--border); transition: color 0.3s, transform 0.3s, opacity 0.3s; letter-spacing: -0.02em; line-height: 60px; height: 60px; }
 .year-btn:hover { color: var(--muted); }
-.year-btn.active { color: var(--ink); border-bottom-color: var(--gold); }
+.year-btn.active { color: var(--ink); font-size: 2.4rem; }
 .archive-post-list { list-style: none; }
 .archive-post-item { padding: 1.75rem 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 100px 1fr; gap: 2rem; align-items: baseline; opacity: 0; transform: translateX(16px); transition: opacity 0.35s ease, transform 0.35s ease; }
 .archive-post-item.vis { opacity: 1; transform: translateX(0); }
@@ -294,8 +302,12 @@ nav.main-nav.open a {
   .posts-grid, .apps-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
   .section-header { padding: 3rem 1.5rem 1.5rem; }
   .archive-section { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
-  .archive-years { position: static; display: flex; gap: 1rem; flex-wrap: wrap; }
-  .year-btn { font-size: 1.5rem; }
+  .archive-years { position: static; }
+  .year-wheel-mask { height: 200px; }
+  .year-wheel-highlight { top: 70px; height: 60px; }
+  .year-wheel-mask::before, .year-wheel-mask::after { height: 50px; }
+  .year-btn { font-size: 1.5rem; line-height: 50px; height: 50px; }
+  .year-btn.active { font-size: 1.8rem; }
   .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
   footer { padding: 3rem 1.5rem 2rem; }
   .breadcrumb-inner, .article-header, .article-image-inner, .article-layout, .post-nav-item { padding-left: 1.5rem; padding-right: 1.5rem; }

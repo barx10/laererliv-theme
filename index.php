@@ -4,22 +4,22 @@
 
 <section class="hero">
   <div class="hero-text">
-    <p class="hero-eyebrow">Fra klasserom til storsamfunn</p>
-    <h1 class="hero-headline">Tanker om <em>skole</em>, teknologi og alt imellom</h1>
-    <p class="hero-sub">Kenneth Bareksten skriver om undervisning, digital kompetanse og hva som skjer naar laerere tar pennen.</p>
-    <a class="hero-cta" href="#featured">Les innleggene &rarr;</a>
+    <p class="hero-eyebrow"><?php echo esc_html( get_theme_mod( 'laererliv_hero_eyebrow', 'Fra klasserom til storsamfunn' ) ); ?></p>
+    <h1 class="hero-headline"><?php echo wp_kses_post( get_theme_mod( 'laererliv_hero_headline', 'Tanker om <em>skole</em>, teknologi og alt imellom' ) ); ?></h1>
+    <p class="hero-sub"><?php echo esc_html( get_theme_mod( 'laererliv_hero_sub', 'Kenneth Bareksten skriver om undervisning, digital kompetanse og hva som skjer naar laerere tar pennen.' ) ); ?></p>
+    <a class="hero-cta" href="<?php echo esc_url( get_theme_mod( 'laererliv_hero_cta_url', '#featured' ) ); ?>"><?php echo esc_html( get_theme_mod( 'laererliv_hero_cta_text', 'Les innleggene' ) ); ?> &rarr;</a>
   </div>
   <div class="hero-portrait">
     <?php $hero_img = get_theme_mod( 'laererliv_hero_image' );
     if ( $hero_img ) : ?>
-      <img class="hero-portrait-img" src="<?php echo esc_url( $hero_img ); ?>" alt="Kenneth Bareksten">
+      <img class="hero-portrait-img" src="<?php echo esc_url( $hero_img ); ?>" alt="<?php echo esc_attr( get_theme_mod( 'laererliv_hero_name', 'Kenneth Bareksten' ) ); ?>">
     <?php else : ?>
       <div class="hero-portrait-svg"></div>
     <?php endif; ?>
     <div class="hero-portrait-overlay"></div>
     <div class="hero-portrait-caption">
-      <p class="hero-portrait-name">Kenneth Bareksten</p>
-      <p class="hero-portrait-role">Lektor &middot; Skribent &middot; Foredragsholder</p>
+      <p class="hero-portrait-name"><?php echo esc_html( get_theme_mod( 'laererliv_hero_name', 'Kenneth Bareksten' ) ); ?></p>
+      <p class="hero-portrait-role"><?php echo esc_html( get_theme_mod( 'laererliv_hero_role', 'Lektor · Skribent · Foredragsholder' ) ); ?></p>
     </div>
   </div>
 </section>
@@ -32,7 +32,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
 ?>
 <section class="featured reveal" id="featured">
   <div>
-    <p class="featured-label">Siste innlegg</p>
+    <p class="featured-label"><?php echo esc_html( get_theme_mod( 'laererliv_featured_label', 'Siste innlegg' ) ); ?></p>
     <h2 class="featured-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h2>
     <p class="featured-excerpt"><?php echo wp_trim_words( get_the_excerpt(), 35 ); ?></p>
     <a class="hero-cta" href="<?php the_permalink(); ?>">Les videre &rarr;</a>
@@ -44,7 +44,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
 </section>
 <?php wp_reset_postdata(); endif; ?>
 
-<div class="section-header reveal"><h2>Tilfeldig utvalg</h2></div>
+<div class="section-header reveal"><h2><?php echo esc_html( get_theme_mod( 'laererliv_random_heading', 'Tilfeldig utvalg' ) ); ?></h2></div>
 <div class="posts-grid reveal">
   <?php
   $random = new WP_Query( array( 'posts_per_page' => 3, 'orderby' => 'rand', 'post_status' => 'publish', 'offset' => 1 ) );
@@ -53,18 +53,23 @@ if ( $featured->have_posts() ) : $featured->the_post();
   endwhile; wp_reset_postdata(); ?>
 </div>
 
-<div class="section-header reveal"><h2>Arkiv</h2></div>
+<div class="section-header reveal"><h2><?php echo esc_html( get_theme_mod( 'laererliv_archive_heading', 'Arkiv' ) ); ?></h2></div>
 <section class="archive-section reveal">
   <div class="archive-years">
-    <p class="archive-years-label">Velg aar</p>
-    <ul class="year-list">
-      <?php
-      global $wpdb;
-      $years = $wpdb->get_col( "SELECT DISTINCT YEAR(post_date) FROM $wpdb->posts WHERE post_status='publish' AND post_type='post' ORDER BY YEAR(post_date) DESC" );
-      foreach ( $years as $year ) : ?>
-        <li><button class="year-btn" data-year="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></button></li>
-      <?php endforeach; ?>
-    </ul>
+    <p class="archive-years-label"><?php echo esc_html( get_theme_mod( 'laererliv_archive_years_label', 'Velg aar' ) ); ?></p>
+    <div class="year-wheel-wrapper">
+      <div class="year-wheel-mask">
+        <div class="year-wheel-highlight"></div>
+        <ul class="year-list" id="year-wheel">
+          <?php
+          global $wpdb;
+          $years = $wpdb->get_col( "SELECT DISTINCT YEAR(post_date) FROM $wpdb->posts WHERE post_status='publish' AND post_type='post' ORDER BY YEAR(post_date) DESC" );
+          foreach ( $years as $i => $year ) : ?>
+            <li><button class="year-btn<?php echo $i === 0 ? ' active' : ''; ?>" data-year="<?php echo esc_attr( $year ); ?>"><?php echo esc_html( $year ); ?></button></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </div>
   </div>
   <ul class="archive-post-list">
     <?php
