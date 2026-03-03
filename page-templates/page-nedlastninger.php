@@ -10,7 +10,7 @@ get_header(); ?>
       <p class="page-eyebrow page-anim" style="animation-delay:.1s">Ressurser</p>
       <h1 class="page-title page-anim" style="animation-delay:.25s">Ned&shy;lastninger</h1>
     </div>
-    <p class="page-intro page-anim" style="animation-delay:.4s">Boeker, artikler og undervisningsmateriell til fri nedlasting.</p>
+    <p class="page-intro page-anim" style="animation-delay:.4s"><?php echo esc_html( get_theme_mod( 'laererliv_nedlastninger_intro', 'Bøker, artikler og undervisningsmateriell til fri nedlasting.' ) ); ?></p>
   </div>
 </div>
 

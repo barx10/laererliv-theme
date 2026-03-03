@@ -7,7 +7,9 @@
     <p class="hero-eyebrow"><?php echo esc_html( get_theme_mod( 'laererliv_hero_eyebrow', 'Fra klasserom til storsamfunn' ) ); ?></p>
     <h1 class="hero-headline"><?php echo wp_kses_post( get_theme_mod( 'laererliv_hero_headline', 'Tanker om <em>skole</em>, teknologi og alt imellom' ) ); ?></h1>
     <p class="hero-sub"><?php echo esc_html( get_theme_mod( 'laererliv_hero_sub', 'Kenneth Bareksten skriver om undervisning, digital kompetanse og hva som skjer naar laerere tar pennen.' ) ); ?></p>
-    <a class="hero-cta" href="<?php echo esc_url( get_theme_mod( 'laererliv_hero_cta_url', '#featured' ) ); ?>"><?php echo esc_html( get_theme_mod( 'laererliv_hero_cta_text', 'Les innleggene' ) ); ?> &rarr;</a>
+    <?php $cta_text = get_theme_mod( 'laererliv_hero_cta_text', 'Les innleggene' ); if ( $cta_text ) : ?>
+    <a class="hero-cta" href="<?php echo esc_url( get_theme_mod( 'laererliv_hero_cta_url', '#featured' ) ); ?>"><?php echo esc_html( $cta_text ); ?> &rarr;</a>
+    <?php endif; ?>
   </div>
   <div class="hero-portrait">
     <?php $hero_img = get_theme_mod( 'laererliv_hero_image' );

@@ -532,6 +532,45 @@ function laererliv_customize_register( $wp_customize ) {
         'section' => 'laererliv_footer',
         'type'    => 'text',
     ) );
+
+    // ----------------------------------------
+    // UNDERSIDER — intro-tekst
+    // ----------------------------------------
+    $wp_customize->add_section( 'laererliv_undersider', array(
+        'title'    => 'Undersider',
+        'priority' => 35,
+    ) );
+
+    $undersider = array(
+        'nedlastninger' => array(
+            'label'   => 'Nedlastninger — intro',
+            'default' => 'Bøker, artikler og undervisningsmateriell til fri nedlasting.',
+        ),
+        'apper' => array(
+            'label'   => 'Apper og nettsider — intro',
+            'default' => 'Verktøy, apper og nettsider Kenneth har laget eller anbefaler for lærere.',
+        ),
+        'publikasjoner' => array(
+            'label'   => 'Andre publikasjoner — intro',
+            'default' => 'Artikler og kronikker publisert i Utdanningsnytt, AI Avisen og andre medier.',
+        ),
+        'om' => array(
+            'label'   => 'Om Lærerliv — intro',
+            'default' => 'Bloggen drives av Kenneth Bareksten, lektor og skribent i Oslo.',
+        ),
+    );
+
+    foreach ( $undersider as $key => $args ) {
+        $wp_customize->add_setting( 'laererliv_' . $key . '_intro', array(
+            'default'           => $args['default'],
+            'sanitize_callback' => 'sanitize_text_field',
+        ) );
+        $wp_customize->add_control( 'laererliv_' . $key . '_intro', array(
+            'label'   => $args['label'],
+            'section' => 'laererliv_undersider',
+            'type'    => 'textarea',
+        ) );
+    }
 }
 add_action( 'customize_register', 'laererliv_customize_register' );
 

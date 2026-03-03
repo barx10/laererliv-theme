@@ -10,7 +10,7 @@ get_header(); ?>
       <p class="page-eyebrow page-anim" style="animation-delay:.1s">Hvem</p>
       <h1 class="page-title page-anim" style="animation-delay:.25s">Om <em>L&aelig;rerliv</em></h1>
     </div>
-    <p class="page-intro page-anim" style="animation-delay:.4s">Bloggen drives av Kenneth Bareksten, lektor og skribent i Oslo.</p>
+    <p class="page-intro page-anim" style="animation-delay:.4s"><?php echo esc_html( get_theme_mod( 'laererliv_om_intro', 'Bloggen drives av Kenneth Bareksten, lektor og skribent i Oslo.' ) ); ?></p>
   </div>
 </div>
 

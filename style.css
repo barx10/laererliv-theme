@@ -27,6 +27,8 @@ body { background: var(--paper); color: var(--ink); font-family: 'Outfit', sans-
 
 header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--paper); border-bottom: 1px solid var(--border); padding: 0 3rem; display: flex; align-items: center; justify-content: space-between; height: 60px; transition: box-shadow 0.3s; }
 header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+.admin-bar header { top: 32px; }
+@media screen and (max-width: 782px) { .admin-bar header { top: 46px; } }
 .logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
 nav.main-nav { display: flex; gap: 2.5rem; align-items: center; }
 nav.main-nav a { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
