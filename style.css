@@ -156,14 +156,17 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 
 .publications-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .publications-list { list-style: none; }
-.pub-item { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; padding: 2rem 0; border-bottom: 1px solid var(--border); }
+.pub-item { display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center; padding: 2rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease, opacity 0.5s ease, transform 0.5s ease; }
 .pub-item:first-child { border-top: 1px solid var(--border); }
+.pub-item:hover { background: var(--cream); }
+.pub-item.hiding { opacity: 0; transform: translateY(8px); pointer-events: none; height: 0; padding: 0 2rem; border-color: transparent; overflow: hidden; }
 .pub-source { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 0.35rem; }
-.pub-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 400; line-height: 1.35; margin-bottom: 0.35rem; }
-.pub-title a { color: var(--ink); text-decoration: none; transition: color 0.2s; }
+.pub-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 400; line-height: 1.35; margin-bottom: 0.35rem; transition: color 0.2s; }
+.pub-item:hover .pub-title { color: var(--forest); }
+.pub-title a { color: inherit; text-decoration: none; transition: color 0.2s; }
 .pub-title a:hover { color: var(--forest); }
 .pub-date { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
-.pub-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.2s; }
+.pub-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s, gap 0.25s; }
 .pub-link:hover { color: var(--gold); }
 
 .about-section { max-width: 1400px; margin: 0 auto; padding: 5rem 3rem 8rem; }

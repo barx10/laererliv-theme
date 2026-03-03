@@ -4,20 +4,20 @@
  */
 get_header(); ?>
 
-<div class="page-header">
+<div class="page-header page-header--tall">
   <div class="page-header-inner">
     <div>
-      <p class="page-eyebrow">Publisert</p>
-      <h1 class="page-title">Andre <em>publikasjoner</em></h1>
+      <p class="page-eyebrow page-anim" style="animation-delay:.1s">Publisert</p>
+      <h1 class="page-title page-anim" style="animation-delay:.25s">Andre <em>publikasjoner</em></h1>
     </div>
-    <p class="page-intro">Artikler og kronikker publisert i Utdanningsnytt, AI Avisen og andre medier.</p>
+    <p class="page-intro page-anim" style="animation-delay:.4s">Artikler og kronikker publisert i Utdanningsnytt, AI Avisen og andre medier.</p>
   </div>
 </div>
 
 <?php
 $pub_kilder = get_terms( array( 'taxonomy' => 'pub_kilde', 'hide_empty' => true ) );
 if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
-<div class="filter-bar">
+<div class="filter-bar page-anim" style="animation-delay:.5s">
   <div class="filter-inner">
     <button class="filter-btn active" data-filter="alle">Alle</button>
     <?php foreach ( $pub_kilder as $kilde ) : ?>
@@ -31,6 +31,7 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
   <ul class="publications-list">
     <?php
     $pubs = new WP_Query( array( 'post_type' => 'publikasjon', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC' ) );
+    $pub_index = 0;
     while ( $pubs->have_posts() ) : $pubs->the_post();
         $url     = get_post_meta( get_the_ID(), '_pub_url', true );
         $dato    = get_post_meta( get_the_ID(), '_pub_dato', true );
@@ -38,7 +39,7 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
         $kilde_slug = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->slug : '';
         $kilde_name = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->name : '';
     ?>
-    <li class="pub-item" data-category="<?php echo esc_attr( $kilde_slug ); ?>">
+    <li class="pub-item reveal" data-category="<?php echo esc_attr( $kilde_slug ); ?>" style="transition-delay:<?php echo $pub_index * 0.07; ?>s">
       <div>
         <?php if ( $kilde_name ) : ?><p class="pub-source"><?php echo esc_html( $kilde_name ); ?></p><?php endif; ?>
         <p class="pub-title">
@@ -52,7 +53,7 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
         <a class="pub-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Les &rarr;</a>
       <?php endif; ?>
     </li>
-    <?php endwhile; wp_reset_postdata(); ?>
+    <?php $pub_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
 </section>
 
