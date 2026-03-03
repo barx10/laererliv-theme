@@ -69,6 +69,37 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // READ PROGRESS BAR (single.php)
+  // ========================================
+  var progressBar = document.getElementById('read-progress');
+  var articleBody = document.querySelector('.article-body');
+  if (progressBar && articleBody) {
+    window.addEventListener('scroll', function () {
+      var rect = articleBody.getBoundingClientRect();
+      var articleTop = rect.top + window.scrollY - 200;
+      var articleHeight = articleBody.offsetHeight;
+      var scrolled = window.scrollY - articleTop;
+      var progress = Math.min(100, Math.max(0, (scrolled / articleHeight) * 100));
+      progressBar.style.width = progress + '%';
+    });
+  }
+
+  // ========================================
+  // COPY LINK BUTTON (single.php)
+  // ========================================
+  var copyBtn = document.querySelector('.share-copy');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(window.location.href).then(function () {
+        var original = copyBtn.textContent;
+        copyBtn.textContent = '✓ Kopiert!';
+        setTimeout(function () { copyBtn.textContent = original; }, 2000);
+      });
+    });
+  }
+
+  // ========================================
   // YEAR WHEEL (arkiv)
   // ========================================
   var wheel = document.getElementById('year-wheel');

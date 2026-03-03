@@ -457,6 +457,80 @@ function laererliv_customize_register( $wp_customize ) {
         'section' => 'laererliv_sections',
         'type'    => 'text',
     ) );
+
+    // --- Footer ---
+    $wp_customize->add_section( 'laererliv_footer', array(
+        'title'    => 'Footer',
+        'priority' => 32,
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_footer_desc', array(
+        'default'           => 'Kenneth skriver om skole, undervisning, teknologi og det som skjer naar disse verdener moetes. Lektor ved ungdomsskole i Oslo.',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_desc', array(
+        'label'   => 'Footer-beskrivelse',
+        'section' => 'laererliv_footer',
+        'type'    => 'textarea',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_footer_email', array(
+        'default'           => 'kenneth@laererliv.no',
+        'sanitize_callback' => 'sanitize_email',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_email', array(
+        'label'   => 'E-postadresse',
+        'section' => 'laererliv_footer',
+        'type'    => 'email',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_footer_link1_text', array(
+        'default'           => 'Utdanningsnytt',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_link1_text', array(
+        'label'   => 'Ekstern lenke 1 — tekst',
+        'section' => 'laererliv_footer',
+        'type'    => 'text',
+    ) );
+    $wp_customize->add_setting( 'laererliv_footer_link1_url', array(
+        'default'           => 'https://www.utdanningsnytt.no',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_link1_url', array(
+        'label'   => 'Ekstern lenke 1 — URL',
+        'section' => 'laererliv_footer',
+        'type'    => 'url',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_footer_link2_text', array(
+        'default'           => 'AI Avisen',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_link2_text', array(
+        'label'   => 'Ekstern lenke 2 — tekst',
+        'section' => 'laererliv_footer',
+        'type'    => 'text',
+    ) );
+    $wp_customize->add_setting( 'laererliv_footer_link2_url', array(
+        'default'           => 'https://aiavisen.no',
+        'sanitize_callback' => 'esc_url_raw',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_link2_url', array(
+        'label'   => 'Ekstern lenke 2 — URL',
+        'section' => 'laererliv_footer',
+        'type'    => 'url',
+    ) );
+
+    $wp_customize->add_setting( 'laererliv_footer_tagline', array(
+        'default'           => 'Fra klasserom til storsamfunn',
+        'sanitize_callback' => 'sanitize_text_field',
+    ) );
+    $wp_customize->add_control( 'laererliv_footer_tagline', array(
+        'label'   => 'Tagline (nederst i footer)',
+        'section' => 'laererliv_footer',
+        'type'    => 'text',
+    ) );
 }
 add_action( 'customize_register', 'laererliv_customize_register' );
 

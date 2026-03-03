@@ -30,7 +30,7 @@ header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
 .logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
 nav.main-nav { display: flex; gap: 2.5rem; align-items: center; }
 nav.main-nav a { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current_page_item > a { color: var(--ink); }
+nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .menu-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; }
 .menu-toggle span { display: block; width: 22px; height: 1.5px; background: var(--ink); margin: 5px 0; transition: 0.3s; }
 
@@ -44,6 +44,7 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 .hero-cta { display: inline-flex; align-items: center; gap: 0.75rem; font-size: 0.7rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--forest); text-decoration: none; border-bottom: 1px solid var(--forest); padding-bottom: 0.25rem; transition: gap 0.25s, color 0.2s; }
 .hero-cta:hover { gap: 1.25rem; color: var(--gold); border-color: var(--gold); }
 .hero-portrait { position: relative; background: #1a1a18; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.hero-portrait-svg { width: 100%; height: 100%; background: #1a1a18; }
 .hero-portrait-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%) contrast(1.1); display: block; }
 .hero-portrait-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,14,12,0.75) 0%, transparent 55%); pointer-events: none; }
 .hero-portrait-caption { position: absolute; bottom: 2.5rem; left: 2.5rem; right: 2.5rem; }
@@ -55,6 +56,8 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
 .featured { border-top: 1px solid var(--border); padding: 6rem 3rem; max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 3fr 2fr; gap: 5rem; align-items: center; }
+.featured-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+.featured-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
 .featured-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 400; line-height: 1.15; margin-bottom: 1.5rem; letter-spacing: -0.01em; }
 .featured-title a { color: var(--ink); text-decoration: none; transition: color 0.2s; }
 .featured-title a:hover { color: var(--forest); }
@@ -70,7 +73,8 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 .post-card-img { aspect-ratio: 16/10; overflow: hidden; margin-bottom: 0.5rem; background: var(--cream); }
 .post-card-img img { width: 100%; height: 100%; object-fit: cover; }
 .post-tag { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
-.post-card-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 400; line-height: 1.3; color: var(--ink); }
+.post-card-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 400; line-height: 1.3; color: var(--ink); transition: color 0.2s; }
+.post-card:hover .post-card-title { color: var(--forest); }
 .post-card-excerpt { font-size: 0.83rem; color: var(--muted); line-height: 1.7; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .post-card-foot { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
 .post-date { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.08em; }
@@ -110,6 +114,8 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 .page-title { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5vw, 5rem); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; }
 .page-title em { font-style: italic; color: var(--forest); }
 .page-intro { font-size: 1rem; line-height: 1.85; color: var(--muted); max-width: 480px; align-self: end; padding-bottom: 0.25rem; }
+.page-intro a { color: var(--forest); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+.page-intro a:hover { color: var(--gold); }
 .page-anim { animation: fadeUp 0.7s ease both; }
 
 .filter-bar { border-bottom: 1px solid var(--border); background: var(--paper); position: sticky; top: 60px; z-index: 50; }
@@ -174,6 +180,8 @@ nav.main-nav a:hover, nav.main-nav .current-menu-item > a, nav.main-nav .current
 .about-body { max-width: 700px; }
 .about-body p { font-size: 1.05rem; line-height: 1.9; color: var(--ink); margin-bottom: 1.75rem; font-weight: 300; }
 .about-body h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 400; line-height: 1.25; margin: 3rem 0 1.25rem; color: var(--ink); }
+.about-body a { color: var(--forest); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+.about-body a:hover { color: var(--gold); }
 .about-sidebar { position: sticky; top: 80px; }
 .about-photo { width: 100%; aspect-ratio: 3/4; background: var(--cream); overflow: hidden; margin-bottom: 2rem; }
 .about-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.1); }
@@ -332,6 +340,7 @@ nav.main-nav.open a {
   .page-header--tall { min-height: 30vh; }
   .download-item { grid-template-columns: 1fr; gap: 1rem; padding: 2rem 1rem; margin: 0 -1rem; }
   .download-icon { display: none; }
+  .pub-item { padding: 1.5rem 1rem; margin: 0 -1rem; }
   .filter-inner { padding: 0 1.5rem; overflow-x: auto; }
   .about-sidebar { grid-template-columns: 1fr; }
 }

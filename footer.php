@@ -1,8 +1,8 @@
 <footer>
   <div class="footer-top">
     <div>
-      <a class="footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">Laererliv</a>
-      <p class="footer-desc">Kenneth skriver om skole, undervisning, teknologi og det som skjer naar disse verdener moetes. Lektor ved ungdomsskole i Oslo.</p>
+      <a class="footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">L&aelig;rerliv</a>
+      <p class="footer-desc"><?php echo esc_html( get_theme_mod( 'laererliv_footer_desc', 'Kenneth skriver om skole, undervisning, teknologi og det som skjer naar disse verdener moetes. Lektor ved ungdomsskole i Oslo.' ) ); ?></p>
     </div>
     <div>
       <p class="footer-col-title">Sider</p>
@@ -21,22 +21,32 @@
             <li><a href="<?php echo esc_url( home_url( '/nedlastninger/' ) ); ?>">Nedlastninger</a></li>
             <li><a href="<?php echo esc_url( home_url( '/apper-og-nettsider/' ) ); ?>">Apper og nettsider</a></li>
             <li><a href="<?php echo esc_url( home_url( '/andre-publikasjoner/' ) ); ?>">Andre publikasjoner</a></li>
-            <li><a href="<?php echo esc_url( home_url( '/om-laererliv/' ) ); ?>">Om Laererliv</a></li>
+            <li><a href="<?php echo esc_url( home_url( '/om-laererliv/' ) ); ?>">Om L&aelig;rerliv</a></li>
         <?php } ?>
       </ul>
     </div>
     <div>
       <p class="footer-col-title">Kontakt</p>
       <ul class="footer-links">
-        <li><a href="mailto:kenneth@laererliv.no">kenneth@laererliv.no</a></li>
-        <li><a href="https://www.utdanningsnytt.no" target="_blank" rel="noopener">Utdanningsnytt</a></li>
-        <li><a href="https://aiavisen.no" target="_blank" rel="noopener">AI Avisen</a></li>
+        <?php $footer_email = get_theme_mod( 'laererliv_footer_email', 'kenneth@laererliv.no' ); ?>
+        <li><a href="mailto:<?php echo esc_attr( $footer_email ); ?>"><?php echo esc_html( $footer_email ); ?></a></li>
+        <?php
+        $link1_text = get_theme_mod( 'laererliv_footer_link1_text', 'Utdanningsnytt' );
+        $link1_url  = get_theme_mod( 'laererliv_footer_link1_url', 'https://www.utdanningsnytt.no' );
+        $link2_text = get_theme_mod( 'laererliv_footer_link2_text', 'AI Avisen' );
+        $link2_url  = get_theme_mod( 'laererliv_footer_link2_url', 'https://aiavisen.no' );
+        if ( $link1_text && $link1_url ) : ?>
+          <li><a href="<?php echo esc_url( $link1_url ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $link1_text ); ?></a></li>
+        <?php endif;
+        if ( $link2_text && $link2_url ) : ?>
+          <li><a href="<?php echo esc_url( $link2_url ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $link2_text ); ?></a></li>
+        <?php endif; ?>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>&copy; <?php echo date( 'Y' ); ?> Laererliv</span>
-    <span>Fra klasserom til storsamfunn</span>
+    <span>&copy; <?php echo date( 'Y' ); ?> L&aelig;rerliv</span>
+    <span><?php echo esc_html( get_theme_mod( 'laererliv_footer_tagline', 'Fra klasserom til storsamfunn' ) ); ?></span>
   </div>
 </footer>
 

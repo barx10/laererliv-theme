@@ -4,17 +4,17 @@
  */
 get_header(); ?>
 
-<div class="page-header">
+<div class="page-header page-header--tall">
   <div class="page-header-inner">
     <div>
-      <p class="page-eyebrow">Hvem</p>
-      <h1 class="page-title">Om <em>L&aelig;rerliv</em></h1>
+      <p class="page-eyebrow page-anim" style="animation-delay:.1s">Hvem</p>
+      <h1 class="page-title page-anim" style="animation-delay:.25s">Om <em>L&aelig;rerliv</em></h1>
     </div>
-    <p class="page-intro">Bloggen drives av Kenneth Bareksten, lektor og skribent i Oslo.</p>
+    <p class="page-intro page-anim" style="animation-delay:.4s">Bloggen drives av Kenneth Bareksten, lektor og skribent i Oslo.</p>
   </div>
 </div>
 
-<section class="about-section">
+<section class="about-section reveal">
   <div class="about-grid">
     <div class="about-body">
       <?php while ( have_posts() ) : the_post(); ?>

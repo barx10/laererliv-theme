@@ -91,17 +91,17 @@ if ( $featured->have_posts() ) : $featured->the_post();
 
 <?php else : ?>
 
-<div class="page-header">
+<div class="page-header page-header--tall">
   <div class="page-header-inner">
     <div>
-      <p class="page-eyebrow">Blogg</p>
-      <h1 class="page-title">Alle <em>innlegg</em></h1>
+      <p class="page-eyebrow page-anim" style="animation-delay:.1s">Blogg</p>
+      <h1 class="page-title page-anim" style="animation-delay:.25s">Alle <em>innlegg</em></h1>
     </div>
-    <p class="page-intro">Artikler og refleksjoner fra Kenneth Bareksten.</p>
+    <p class="page-intro page-anim" style="animation-delay:.4s">Artikler og refleksjoner fra Kenneth Bareksten.</p>
   </div>
 </div>
-<div class="section-header"><h2>Innlegg</h2></div>
-<div class="posts-grid">
+<div class="section-header reveal"><h2>Innlegg</h2></div>
+<div class="posts-grid reveal">
   <?php while ( have_posts() ) : the_post();
       get_template_part( 'template-parts/post-card' );
   endwhile; ?>
