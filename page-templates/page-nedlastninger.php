@@ -43,6 +43,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
         $icon_class = strtolower( $filtype );
     ?>
     <li class="download-item reveal" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="transition-delay:<?php echo $dl_index * 0.07; ?>s">
+      <?php if ( $fil_url ) : ?><a href="<?php echo esc_url( $fil_url ); ?>" target="_blank" rel="noopener" class="download-item-link"><?php endif; ?>
       <?php if ( has_post_thumbnail() ) : ?>
         <div class="download-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
       <?php else : ?>
@@ -50,7 +51,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
       <?php endif; ?>
       <div class="download-body">
         <?php if ( $cat_name_dl ) : ?><p class="download-tag"><?php echo esc_html( $cat_name_dl ); ?></p><?php endif; ?>
-        <h3 class="download-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
+        <h3 class="download-title"><?php the_title(); ?></h3>
         <p class="download-desc"><?php echo wp_trim_words( get_the_content(), 30 ); ?></p>
         <?php if ( $filtype || $filstr || $aar ) : ?>
           <p class="download-meta">
@@ -61,11 +62,9 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
         <?php endif; ?>
       </div>
       <div class="download-actions">
-        <?php if ( $fil_url ) : ?>
-          <a class="download-btn" href="<?php echo esc_url( $fil_url ); ?>" download>&darr; Last ned</a>
-          <a class="download-btn secondary" href="<?php echo esc_url( $fil_url ); ?>" target="_blank" rel="noopener">&nearr; Se</a>
-        <?php endif; ?>
+        <span class="download-btn">&darr; Last ned</span>
       </div>
+      <?php if ( $fil_url ) : ?></a><?php endif; ?>
     </li>
     <?php $dl_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
