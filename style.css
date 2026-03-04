@@ -151,6 +151,33 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .download-btn.secondary { border-color: var(--border); color: var(--muted); }
 .download-btn.secondary:hover { border-color: var(--ink); color: var(--ink); background: transparent; }
 
+/* Klikkbar tittel i nedlastningslisten */
+.download-title a { color: inherit; text-decoration: none; }
+.download-title a:hover { color: var(--forest); }
+
+/* Enkeltside for nedlastning */
+.single-download-header { background: var(--cream); padding: 4rem 0 3rem; }
+.single-download-header-inner { max-width: 900px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; }
+.single-download-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 0.5rem; }
+.single-download-meta { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Outfit', sans-serif; }
+.single-download-actions { display: flex; flex-direction: column; gap: 0.5rem; flex-shrink: 0; }
+.single-download-image { max-width: 900px; margin: 2.5rem auto 0; padding: 0 2rem; }
+.single-download-image img { width: 100%; height: auto; border-radius: 4px; }
+.single-download-body { max-width: 900px; margin: 2.5rem auto 0; padding: 0 2rem; font-size: 1.05rem; line-height: 1.85; color: var(--ink); }
+.single-download-body p { margin-bottom: 1.4rem; }
+.single-download-body h2, .single-download-body h3 { font-family: 'Playfair Display', serif; margin: 2rem 0 0.75rem; font-weight: 400; }
+.single-download-body h2 { font-size: 1.5rem; }
+.single-download-body h3 { font-size: 1.2rem; }
+.single-download-body ul, .single-download-body ol { margin: 0 0 1.4rem 1.5rem; }
+.single-download-body li { margin-bottom: 0.4rem; }
+.single-download-cta { max-width: 900px; margin: 3rem auto 4rem; padding: 2rem; border: 1px solid var(--border); border-radius: 4px; display: flex; gap: 1rem; justify-content: center; align-items: center; }
+
+@media (max-width: 768px) {
+  .single-download-header-inner { flex-direction: column; align-items: flex-start; }
+  .single-download-title { font-size: 1.8rem; }
+  .single-download-cta { flex-direction: column; }
+}
+
 .apps-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .apps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); border-right: none; border-bottom: none; }
 .app-card { padding: 2.5rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 1rem; transition: background 0.3s ease, opacity 0.5s ease, transform 0.5s ease; animation: fadeUp 0.7s ease both; }

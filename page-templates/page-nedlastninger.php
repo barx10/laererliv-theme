@@ -50,7 +50,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
       <?php endif; ?>
       <div class="download-body">
         <?php if ( $cat_name_dl ) : ?><p class="download-tag"><?php echo esc_html( $cat_name_dl ); ?></p><?php endif; ?>
-        <h3 class="download-title"><?php the_title(); ?></h3>
+        <h3 class="download-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
         <p class="download-desc"><?php echo wp_trim_words( get_the_content(), 30 ); ?></p>
         <?php if ( $filtype || $filstr || $aar ) : ?>
           <p class="download-meta">
