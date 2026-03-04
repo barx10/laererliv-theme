@@ -26,6 +26,53 @@ function laererliv_setup() {
 }
 add_action( 'after_setup_theme', 'laererliv_setup' );
 
+/**
+ * Auto-tilordne menyer til menyplasseringer ved temabytte.
+ * Leter etter menyer kalt «Hovedmeny»/«primary» og «Footermeny»/«footer»
+ * og kobler dem automatisk — slipper å gjøre det manuelt etter zip-opplasting.
+ */
+function laererliv_auto_assign_menus() {
+    $locations = get_theme_mod( 'nav_menu_locations' );
+
+    // Sjekk om menyplasseringene allerede er satt
+    $primary_set = ! empty( $locations['primary'] ) && is_nav_menu( $locations['primary'] );
+    $footer_set  = ! empty( $locations['footer'] ) && is_nav_menu( $locations['footer'] );
+
+    if ( $primary_set && $footer_set ) {
+        return; // Begge er allerede koblet, ingenting å gjøre
+    }
+
+    $menus = wp_get_nav_menus();
+    if ( empty( $menus ) ) return;
+
+    // Mulige navn å lete etter for hver menyplassering
+    $primary_names = array( 'hovedmeny', 'primary', 'main', 'main menu', 'hoved' );
+    $footer_names  = array( 'footermeny', 'footer', 'bunnmeny', 'footer menu' );
+
+    foreach ( $menus as $menu ) {
+        $slug = strtolower( $menu->slug );
+        $name = strtolower( $menu->name );
+
+        if ( ! $primary_set && ( in_array( $slug, $primary_names ) || in_array( $name, $primary_names ) ) ) {
+            $locations['primary'] = $menu->term_id;
+            $primary_set = true;
+        }
+        if ( ! $footer_set && ( in_array( $slug, $footer_names ) || in_array( $name, $footer_names ) ) ) {
+            $locations['footer'] = $menu->term_id;
+            $footer_set = true;
+        }
+    }
+
+    // Hvis primary fortsatt mangler, bruk første meny som finnes
+    if ( ! $primary_set && ! empty( $menus ) ) {
+        $locations['primary'] = $menus[0]->term_id;
+    }
+
+    set_theme_mod( 'nav_menu_locations', $locations );
+}
+add_action( 'after_switch_theme', 'laererliv_auto_assign_menus' );
+add_action( 'load-themes.php', 'laererliv_auto_assign_menus' );
+
 // ========================================
 // STIL OG SKRIPT
 // ========================================
@@ -105,6 +152,40 @@ function laererliv_register_post_types() {
         'supports'     => array( 'title', 'thumbnail', 'custom-fields' ),
         'show_in_rest' => true,
     ) );
+
+    // Foredrag
+    register_post_type( 'foredrag', array(
+        'labels' => array(
+            'name'               => 'Foredrag',
+            'singular_name'      => 'Foredrag',
+            'add_new'            => 'Legg til foredrag',
+            'add_new_item'       => 'Legg til nytt foredrag',
+            'edit_item'          => 'Rediger foredrag',
+            'all_items'          => 'Alle foredrag',
+        ),
+        'public'       => true,
+        'has_archive'  => false,
+        'menu_icon'    => 'dashicons-megaphone',
+        'supports'     => array( 'title', 'custom-fields' ),
+        'show_in_rest' => true,
+    ) );
+
+    // Manuskonsulent
+    register_post_type( 'manuskonsulent', array(
+        'labels' => array(
+            'name'               => 'Manuskonsulent',
+            'singular_name'      => 'Manuskonsulentoppdrag',
+            'add_new'            => 'Legg til oppdrag',
+            'add_new_item'       => 'Legg til nytt oppdrag',
+            'edit_item'          => 'Rediger oppdrag',
+            'all_items'          => 'Alle oppdrag',
+        ),
+        'public'       => true,
+        'has_archive'  => false,
+        'menu_icon'    => 'dashicons-edit-page',
+        'supports'     => array( 'title', 'custom-fields' ),
+        'show_in_rest' => true,
+    ) );
 }
 add_action( 'init', 'laererliv_register_post_types' );
 
@@ -163,8 +244,32 @@ function laererliv_add_meta_boxes() {
 
     // Publikasjon: ekstern URL, dato
     add_meta_box( 'pub_detaljer', 'Publikasjonsdetaljer', 'laererliv_pub_meta_box', 'publikasjon', 'normal', 'high' );
+
+    // Foredrag: arrangementnavn, dato, sted, lenke
+    add_meta_box( 'foredrag_detaljer', 'Foredragsdetaljer', 'laererliv_foredrag_meta_box', 'foredrag', 'normal', 'high' );
+
+    // Manuskonsulent: oppdragsgiver, år, lenke
+    add_meta_box( 'manuskonsulent_detaljer', 'Oppdragsdetaljer', 'laererliv_manuskonsulent_meta_box', 'manuskonsulent', 'normal', 'high' );
 }
 add_action( 'add_meta_boxes', 'laererliv_add_meta_boxes' );
+
+/**
+ * Last inn mediebibliotek-script for nedlastnings-CPT i admin
+ */
+function laererliv_admin_scripts( $hook ) {
+    global $post_type;
+    if ( in_array( $post_type, array( 'nedlastning', 'app', 'publikasjon' ) ) && in_array( $hook, array( 'post.php', 'post-new.php' ) ) ) {
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'laererliv-admin-upload',
+            get_template_directory_uri() . '/assets/js/admin-upload.js',
+            array( 'jquery' ),
+            wp_get_theme()->get( 'Version' ),
+            true
+        );
+    }
+}
+add_action( 'admin_enqueue_scripts', 'laererliv_admin_scripts' );
 
 function laererliv_nedlastning_meta_box( $post ) {
     wp_nonce_field( 'laererliv_nedlastning_nonce', 'laererliv_nedlastning_nonce' );
@@ -174,16 +279,22 @@ function laererliv_nedlastning_meta_box( $post ) {
     $aar         = get_post_meta( $post->ID, '_nedlastning_aar', true );
     ?>
     <p>
-        <label>Filtype (pdf/doc/pptx):</label><br>
-        <input type="text" name="_nedlastning_filtype" value="<?php echo esc_attr( $filtype ); ?>" style="width:200px;">
+        <label><strong>Fil:</strong></label><br>
+        <input type="url" id="nedlastning_fil_url" name="_nedlastning_fil_url" value="<?php echo esc_url( $fil_url ); ?>" style="width:calc(100% - 120px);" placeholder="Klikk Velg fil →">
+        <button type="button" class="button" id="nedlastning_velg_fil">📎 Velg fil</button>
+        <?php if ( $fil_url ) : ?>
+            <br><small style="color:green;">✓ Fil er koblet til</small>
+        <?php else : ?>
+            <br><small style="color:#B8965A;">⚠ Ingen fil valgt — klikk «Velg fil» for å laste opp eller velge fra mediebiblioteket</small>
+        <?php endif; ?>
     </p>
     <p>
-        <label>Filstørrelse (f.eks. 2.4 MB):</label><br>
-        <input type="text" name="_nedlastning_filstr" value="<?php echo esc_attr( $filstr ); ?>" style="width:200px;">
+        <label>Filtype (fylles ut automatisk):</label><br>
+        <input type="text" id="nedlastning_filtype" name="_nedlastning_filtype" value="<?php echo esc_attr( $filtype ); ?>" style="width:200px;" readonly>
     </p>
     <p>
-        <label>Fil-URL (last opp via Mediebiblioteket):</label><br>
-        <input type="url" name="_nedlastning_fil_url" value="<?php echo esc_url( $fil_url ); ?>" style="width:100%;">
+        <label>Filstørrelse (fylles ut automatisk):</label><br>
+        <input type="text" id="nedlastning_filstr" name="_nedlastning_filstr" value="<?php echo esc_attr( $filstr ); ?>" style="width:200px;" readonly>
     </p>
     <p>
         <label>Utgivelsesår:</label><br>
@@ -194,16 +305,34 @@ function laererliv_nedlastning_meta_box( $post ) {
 
 function laererliv_app_meta_box( $post ) {
     wp_nonce_field( 'laererliv_app_nonce', 'laererliv_app_nonce' );
-    $url   = get_post_meta( $post->ID, '_app_url', true );
-    $emoji = get_post_meta( $post->ID, '_app_emoji', true );
+    $url       = get_post_meta( $post->ID, '_app_url', true );
+    $emoji     = get_post_meta( $post->ID, '_app_emoji', true );
+    $ikon_url  = get_post_meta( $post->ID, '_app_ikon_url', true );
     ?>
     <p>
-        <label>Ekstern URL:</label><br>
-        <input type="url" name="_app_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;">
+        <label><strong>Lenke til app/nettside:</strong></label><br>
+        <input type="url" id="app_url" name="_app_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;" placeholder="https://eksempel.no">
+        <?php if ( $url ) : ?>
+            <br><small style="color:green;">✓ Lenke er satt — <a href="<?php echo esc_url( $url ); ?>" target="_blank">test lenken</a></small>
+        <?php else : ?>
+            <br><small style="color:#B8965A;">⚠ Ingen lenke satt — lim inn URL til appen eller nettsiden</small>
+        <?php endif; ?>
     </p>
     <p>
-        <label>Ikon (emoji):</label><br>
-        <input type="text" name="_app_emoji" value="<?php echo esc_attr( $emoji ); ?>" style="width:100px;">
+        <label><strong>Ikon/bilde:</strong></label><br>
+        <span id="app_ikon_preview" style="display:<?php echo $ikon_url ? 'inline-block' : 'none'; ?>; margin-bottom:8px;">
+            <img src="<?php echo esc_url( $ikon_url ); ?>" style="max-width:80px; max-height:80px; border-radius:12px; border:1px solid #D8D4CC;" id="app_ikon_img">
+            <br>
+        </span>
+        <input type="hidden" id="app_ikon_url" name="_app_ikon_url" value="<?php echo esc_url( $ikon_url ); ?>">
+        <button type="button" class="button" id="app_velg_ikon">🖼 Velg bilde</button>
+        <button type="button" class="button" id="app_fjern_ikon" style="<?php echo $ikon_url ? '' : 'display:none;'; ?>">Fjern bilde</button>
+        <br><small>Valgfritt — vises som ikon på app-kortet. Ellers brukes emoji nedenfor.</small>
+    </p>
+    <p>
+        <label><strong>Ikon (emoji):</strong></label><br>
+        <input type="text" name="_app_emoji" value="<?php echo esc_attr( $emoji ); ?>" style="width:100px;" placeholder="🔗">
+        <br><small>Brukes som fallback hvis ikke bilde er valgt. Standard: 🔗</small>
     </p>
     <?php
 }
@@ -214,12 +343,67 @@ function laererliv_pub_meta_box( $post ) {
     $dato = get_post_meta( $post->ID, '_pub_dato', true );
     ?>
     <p>
-        <label>Ekstern URL:</label><br>
-        <input type="url" name="_pub_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;">
+        <label><strong>Lenke til publikasjonen:</strong></label><br>
+        <input type="url" name="_pub_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;" placeholder="https://utdanningsnytt.no/artikkel...">
+        <?php if ( $url ) : ?>
+            <br><small style="color:green;">✓ Lenke er satt — <a href="<?php echo esc_url( $url ); ?>" target="_blank">test lenken</a></small>
+        <?php else : ?>
+            <br><small style="color:#B8965A;">⚠ Ingen lenke satt — lim inn URL til artikkelen/kronikken</small>
+        <?php endif; ?>
     </p>
     <p>
-        <label>Publiseringsdato (f.eks. 15. mars 2024):</label><br>
-        <input type="text" name="_pub_dato" value="<?php echo esc_attr( $dato ); ?>" style="width:200px;">
+        <label><strong>Publiseringsdato:</strong></label><br>
+        <input type="text" name="_pub_dato" value="<?php echo esc_attr( $dato ); ?>" style="width:200px;" placeholder="f.eks. 15. mars 2024">
+        <br><small>Vises på publikasjonssiden ved siden av tittelen</small>
+    </p>
+    <?php
+}
+
+function laererliv_foredrag_meta_box( $post ) {
+    wp_nonce_field( 'laererliv_foredrag_nonce', 'laererliv_foredrag_nonce' );
+    $arrangement = get_post_meta( $post->ID, '_foredrag_arrangement', true );
+    $dato        = get_post_meta( $post->ID, '_foredrag_dato', true );
+    $sted        = get_post_meta( $post->ID, '_foredrag_sted', true );
+    $url         = get_post_meta( $post->ID, '_foredrag_url', true );
+    ?>
+    <p>
+        <label><strong>Arrangement/konferanse:</strong></label><br>
+        <input type="text" name="_foredrag_arrangement" value="<?php echo esc_attr( $arrangement ); ?>" style="width:100%;" placeholder="f.eks. Fleksibel Utdanning">
+    </p>
+    <p>
+        <label><strong>Dato/periode:</strong></label><br>
+        <input type="text" name="_foredrag_dato" value="<?php echo esc_attr( $dato ); ?>" style="width:250px;" placeholder="f.eks. sept. 2023">
+    </p>
+    <p>
+        <label><strong>Sted:</strong></label><br>
+        <input type="text" name="_foredrag_sted" value="<?php echo esc_attr( $sted ); ?>" style="width:250px;" placeholder="f.eks. Oslo">
+    </p>
+    <p>
+        <label><strong>Lenke (valgfritt):</strong></label><br>
+        <input type="url" name="_foredrag_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;" placeholder="https://...">
+        <br><small>Lenke til program, video e.l.</small>
+    </p>
+    <?php
+}
+
+function laererliv_manuskonsulent_meta_box( $post ) {
+    wp_nonce_field( 'laererliv_manuskonsulent_nonce', 'laererliv_manuskonsulent_nonce' );
+    $oppdragsgiver = get_post_meta( $post->ID, '_manus_oppdragsgiver', true );
+    $aar           = get_post_meta( $post->ID, '_manus_aar', true );
+    $url           = get_post_meta( $post->ID, '_manus_url', true );
+    ?>
+    <p>
+        <label><strong>Oppdragsgiver/forfatter:</strong></label><br>
+        <input type="text" name="_manus_oppdragsgiver" value="<?php echo esc_attr( $oppdragsgiver ); ?>" style="width:100%;" placeholder="f.eks. Forfatternavn eller forlag">
+    </p>
+    <p>
+        <label><strong>År:</strong></label><br>
+        <input type="text" name="_manus_aar" value="<?php echo esc_attr( $aar ); ?>" style="width:100px;" placeholder="f.eks. 2024">
+    </p>
+    <p>
+        <label><strong>Lenke (valgfritt):</strong></label><br>
+        <input type="url" name="_manus_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;" placeholder="https://...">
+        <br><small>Lenke til publikasjonen du konsulerte på</small>
     </p>
     <?php
 }
@@ -237,12 +421,28 @@ function laererliv_save_meta( $post_id ) {
     if ( isset( $_POST['laererliv_app_nonce'] ) && wp_verify_nonce( $_POST['laererliv_app_nonce'], 'laererliv_app_nonce' ) ) {
         if ( isset( $_POST['_app_url'] ) ) update_post_meta( $post_id, '_app_url', esc_url_raw( $_POST['_app_url'] ) );
         if ( isset( $_POST['_app_emoji'] ) ) update_post_meta( $post_id, '_app_emoji', sanitize_text_field( $_POST['_app_emoji'] ) );
+        if ( isset( $_POST['_app_ikon_url'] ) ) update_post_meta( $post_id, '_app_ikon_url', esc_url_raw( $_POST['_app_ikon_url'] ) );
     }
 
     // Publikasjon
     if ( isset( $_POST['laererliv_pub_nonce'] ) && wp_verify_nonce( $_POST['laererliv_pub_nonce'], 'laererliv_pub_nonce' ) ) {
         if ( isset( $_POST['_pub_url'] ) ) update_post_meta( $post_id, '_pub_url', esc_url_raw( $_POST['_pub_url'] ) );
         if ( isset( $_POST['_pub_dato'] ) ) update_post_meta( $post_id, '_pub_dato', sanitize_text_field( $_POST['_pub_dato'] ) );
+    }
+
+    // Foredrag
+    if ( isset( $_POST['laererliv_foredrag_nonce'] ) && wp_verify_nonce( $_POST['laererliv_foredrag_nonce'], 'laererliv_foredrag_nonce' ) ) {
+        if ( isset( $_POST['_foredrag_arrangement'] ) ) update_post_meta( $post_id, '_foredrag_arrangement', sanitize_text_field( $_POST['_foredrag_arrangement'] ) );
+        if ( isset( $_POST['_foredrag_dato'] ) ) update_post_meta( $post_id, '_foredrag_dato', sanitize_text_field( $_POST['_foredrag_dato'] ) );
+        if ( isset( $_POST['_foredrag_sted'] ) ) update_post_meta( $post_id, '_foredrag_sted', sanitize_text_field( $_POST['_foredrag_sted'] ) );
+        if ( isset( $_POST['_foredrag_url'] ) ) update_post_meta( $post_id, '_foredrag_url', esc_url_raw( $_POST['_foredrag_url'] ) );
+    }
+
+    // Manuskonsulent
+    if ( isset( $_POST['laererliv_manuskonsulent_nonce'] ) && wp_verify_nonce( $_POST['laererliv_manuskonsulent_nonce'], 'laererliv_manuskonsulent_nonce' ) ) {
+        if ( isset( $_POST['_manus_oppdragsgiver'] ) ) update_post_meta( $post_id, '_manus_oppdragsgiver', sanitize_text_field( $_POST['_manus_oppdragsgiver'] ) );
+        if ( isset( $_POST['_manus_aar'] ) ) update_post_meta( $post_id, '_manus_aar', sanitize_text_field( $_POST['_manus_aar'] ) );
+        if ( isset( $_POST['_manus_url'] ) ) update_post_meta( $post_id, '_manus_url', esc_url_raw( $_POST['_manus_url'] ) );
     }
 }
 add_action( 'save_post', 'laererliv_save_meta' );

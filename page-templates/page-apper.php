@@ -35,6 +35,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
     while ( $apps->have_posts() ) : $apps->the_post();
         $url      = get_post_meta( get_the_ID(), '_app_url', true );
         $emoji    = get_post_meta( get_the_ID(), '_app_emoji', true );
+        $ikon_url = get_post_meta( get_the_ID(), '_app_ikon_url', true );
         $terms    = get_the_terms( get_the_ID(), 'app_kategori' );
         $cat_slug = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->slug : '';
         $cat_name_app = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
@@ -42,6 +43,8 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
     <div class="app-card" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="animation-delay:<?php echo 0.6 + $app_index * 0.08; ?>s">
       <?php if ( has_post_thumbnail() ) : ?>
         <div class="app-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
+      <?php elseif ( $ikon_url ) : ?>
+        <div class="app-thumb"><img src="<?php echo esc_url( $ikon_url ); ?>" alt="<?php the_title_attribute(); ?>"></div>
       <?php else : ?>
         <div class="app-icon"><?php echo esc_html( $emoji ?: '🔗' ); ?></div>
       <?php endif; ?>

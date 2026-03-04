@@ -22,26 +22,70 @@ get_header(); ?>
       <?php endwhile; ?>
     </div>
     <div class="about-sidebar">
-      <?php if ( has_post_thumbnail() ) : ?>
-        <div class="about-photo"><?php the_post_thumbnail( 'hero-portrait' ); ?></div>
+
+      <?php
+      // --- Foredrag ---
+      $foredrag = new WP_Query( array(
+        'post_type'      => 'foredrag',
+        'posts_per_page' => -1,
+        'orderby'        => 'menu_order',
+        'order'          => 'ASC',
+      ) );
+      if ( $foredrag->have_posts() ) : ?>
+      <div class="cv-block">
+        <p class="cv-label">Foredrag</p>
+        <ul class="cv-list">
+          <?php while ( $foredrag->have_posts() ) : $foredrag->the_post();
+            $arrangement = get_post_meta( get_the_ID(), '_foredrag_arrangement', true );
+            $dato        = get_post_meta( get_the_ID(), '_foredrag_dato', true );
+            $sted        = get_post_meta( get_the_ID(), '_foredrag_sted', true );
+            $url         = get_post_meta( get_the_ID(), '_foredrag_url', true );
+          ?>
+          <li>
+            <?php if ( $dato ) : ?><span class="cv-year"><?php echo esc_html( $dato ); ?></span><?php endif; ?>
+            <?php if ( $url ) : ?>
+              <a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener"><?php the_title(); ?></a>
+            <?php else : ?>
+              <?php the_title(); ?>
+            <?php endif; ?>
+            <?php if ( $arrangement ) : ?><br><small><?php echo esc_html( $arrangement ); ?><?php if ( $sted ) echo ', ' . esc_html( $sted ); ?></small><?php endif; ?>
+          </li>
+          <?php endwhile; wp_reset_postdata(); ?>
+        </ul>
+      </div>
       <?php endif; ?>
 
+      <?php
+      // --- Manuskonsulent ---
+      $manus = new WP_Query( array(
+        'post_type'      => 'manuskonsulent',
+        'posts_per_page' => -1,
+        'orderby'        => 'menu_order',
+        'order'          => 'ASC',
+      ) );
+      if ( $manus->have_posts() ) : ?>
       <div class="cv-block">
-        <p class="cv-label">Utdanning</p>
+        <p class="cv-label">Manuskonsulent</p>
         <ul class="cv-list">
-          <li><span class="cv-year">2007</span> Lektor, UiO</li>
-          <li><span class="cv-year">2002</span> Cand.mag., UiO</li>
+          <?php while ( $manus->have_posts() ) : $manus->the_post();
+            $oppdragsgiver = get_post_meta( get_the_ID(), '_manus_oppdragsgiver', true );
+            $aar           = get_post_meta( get_the_ID(), '_manus_aar', true );
+            $url           = get_post_meta( get_the_ID(), '_manus_url', true );
+          ?>
+          <li>
+            <?php if ( $aar ) : ?><span class="cv-year"><?php echo esc_html( $aar ); ?></span><?php endif; ?>
+            <?php if ( $url ) : ?>
+              <a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener"><?php the_title(); ?></a>
+            <?php else : ?>
+              <?php the_title(); ?>
+            <?php endif; ?>
+            <?php if ( $oppdragsgiver ) : ?><br><small><?php echo esc_html( $oppdragsgiver ); ?></small><?php endif; ?>
+          </li>
+          <?php endwhile; wp_reset_postdata(); ?>
         </ul>
       </div>
+      <?php endif; ?>
 
-      <div class="cv-block">
-        <p class="cv-label">Erfaring</p>
-        <ul class="cv-list">
-          <li><span class="cv-year">2007&ndash;</span> Lektor, ungdomsskole i Oslo</li>
-          <li><span class="cv-year">2019&ndash;</span> Skribent, Utdanningsnytt</li>
-          <li><span class="cv-year">2023&ndash;</span> Skribent, AI Avisen</li>
-        </ul>
-      </div>
     </div>
   </div>
 </section>

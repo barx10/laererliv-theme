@@ -207,6 +207,9 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .cv-label { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 1rem; }
 .cv-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
 .cv-list li { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+.cv-list li a { color: var(--forest); text-decoration: underline; text-underline-offset: 3px; transition: color 0.2s; }
+.cv-list li a:hover { color: var(--gold); }
+.cv-list li small { font-size: 0.78rem; color: var(--muted); }
 .cv-year { font-weight: 500; color: var(--ink); margin-right: 0.5rem; }
 
 .read-progress { position: fixed; top: 60px; left: 0; height: 2px; background: var(--gold); z-index: 99; width: 0%; transition: width 0.1s linear; }
