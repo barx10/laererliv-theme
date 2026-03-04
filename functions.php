@@ -73,6 +73,19 @@ function laererliv_auto_assign_menus() {
 add_action( 'after_switch_theme', 'laererliv_auto_assign_menus' );
 add_action( 'load-themes.php', 'laererliv_auto_assign_menus' );
 
+/**
+ * Bruk klassisk editor for CPT-er med egne metabokser.
+ * Gutenberg skjuler metaboksene — klassisk editor viser dem tydelig.
+ */
+function laererliv_disable_gutenberg_for_cpts( $use_block_editor, $post_type ) {
+    $classic_types = array( 'nedlastning', 'app', 'publikasjon', 'foredrag', 'manuskonsulent' );
+    if ( in_array( $post_type, $classic_types ) ) {
+        return false;
+    }
+    return $use_block_editor;
+}
+add_filter( 'use_block_editor_for_post_type', 'laererliv_disable_gutenberg_for_cpts', 10, 2 );
+
 // ========================================
 // STIL OG SKRIPT
 // ========================================
