@@ -169,7 +169,7 @@ function laererliv_register_post_types() {
         'show_in_rest' => true,
     ) );
 
-    // Foredrag
+    // Foredrag (vises kun på om-siden, trenger ikke egne URL-er)
     register_post_type( 'foredrag', array(
         'labels' => array(
             'name'               => 'Foredrag',
@@ -179,14 +179,16 @@ function laererliv_register_post_types() {
             'edit_item'          => 'Rediger foredrag',
             'all_items'          => 'Alle foredrag',
         ),
-        'public'       => true,
+        'public'       => false,
+        'show_ui'      => true,
         'has_archive'  => false,
+        'rewrite'      => false,
         'menu_icon'    => 'dashicons-megaphone',
         'supports'     => array( 'title', 'custom-fields' ),
         'show_in_rest' => true,
     ) );
 
-    // Manuskonsulent
+    // Manuskonsulent (vises kun på om-siden, trenger ikke egne URL-er)
     register_post_type( 'manuskonsulent', array(
         'labels' => array(
             'name'               => 'Manuskonsulent',
@@ -196,8 +198,10 @@ function laererliv_register_post_types() {
             'edit_item'          => 'Rediger oppdrag',
             'all_items'          => 'Alle oppdrag',
         ),
-        'public'       => true,
+        'public'       => false,
+        'show_ui'      => true,
         'has_archive'  => false,
+        'rewrite'      => false,
         'menu_icon'    => 'dashicons-edit-page',
         'supports'     => array( 'title', 'custom-fields' ),
         'show_in_rest' => true,
