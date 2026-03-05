@@ -30,7 +30,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
 <section class="downloads-section">
   <ul class="downloads-list">
     <?php
-    $downloads = new WP_Query( array( 'post_type' => 'nedlastning', 'posts_per_page' => -1, 'meta_key' => '_nedlastning_aar', 'orderby' => 'meta_value_num', 'order' => 'DESC' ) );
+    $downloads = new WP_Query( array( 'post_type' => 'nedlastning', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC' ) );
     $dl_index = 0;
     while ( $downloads->have_posts() ) : $downloads->the_post();
         $filtype  = get_post_meta( get_the_ID(), '_nedlastning_filtype', true );
