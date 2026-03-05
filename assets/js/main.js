@@ -203,6 +203,60 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // APP PAGINERING (apper, 3 og 3)
+  // ========================================
+  var appsPagNav = document.getElementById('apps-pagination-nav');
+  if (appsPagNav) {
+    var appsList = document.querySelector('.apps-list');
+    var appsPrev = document.getElementById('apps-prev');
+    var appsNext = document.getElementById('apps-next');
+    var appsPageCurrent = document.getElementById('apps-page-current');
+    var appsPageTotal = document.getElementById('apps-page-total');
+    var appsPerPage = 3;
+    var appsCurrentPage = 0;
+
+    function getVisibleApps() {
+      return Array.from(appsList.querySelectorAll('.app-item:not(.hiding)'));
+    }
+
+    function showAppsPage(page) {
+      var visible = getVisibleApps();
+      var totalPages = Math.ceil(visible.length / appsPerPage);
+      if (page < 0) page = 0;
+      if (page >= totalPages) page = totalPages - 1;
+      appsCurrentPage = page;
+
+      visible.forEach(function (item, i) {
+        var inPage = i >= page * appsPerPage && i < (page + 1) * appsPerPage;
+        item.classList.toggle('page-hidden', !inPage);
+      });
+
+      if (appsPageCurrent) appsPageCurrent.textContent = page + 1;
+      if (appsPageTotal) appsPageTotal.textContent = totalPages || 1;
+      if (appsPrev) appsPrev.disabled = page === 0;
+      if (appsNext) appsNext.disabled = page >= totalPages - 1;
+
+      if (totalPages > 1) {
+        appsPagNav.style.display = 'flex';
+      } else {
+        appsPagNav.style.display = 'none';
+      }
+    }
+
+    if (appsPrev) appsPrev.addEventListener('click', function () { showAppsPage(appsCurrentPage - 1); });
+    if (appsNext) appsNext.addEventListener('click', function () { showAppsPage(appsCurrentPage + 1); });
+
+    // Reset til side 1 når filter klikkes
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setTimeout(function () { showAppsPage(0); }, 0);
+      });
+    });
+
+    showAppsPage(0);
+  }
+
+  // ========================================
   // YEAR WHEEL (arkiv)
   // ========================================
   var wheel = document.getElementById('year-wheel');
