@@ -317,6 +317,32 @@ document.addEventListener('DOMContentLoaded', function () {
     selectYear(currentIndex + direction);
   }, { passive: false });
 
+  // Year arrow buttons
+  var arrowUp = document.querySelector('.year-arrow--up');
+  var arrowDown = document.querySelector('.year-arrow--down');
+
+  function updateArrows() {
+    if (arrowUp) arrowUp.disabled = currentIndex === 0;
+    if (arrowDown) arrowDown.disabled = currentIndex === items.length - 1;
+  }
+
+  var _origSelectYear = selectYear;
+  selectYear = function(index, animate) {
+    _origSelectYear(index, animate);
+    updateArrows();
+  };
+
+  if (arrowUp) {
+    arrowUp.addEventListener('click', function () {
+      if (currentIndex > 0) selectYear(currentIndex - 1);
+    });
+  }
+  if (arrowDown) {
+    arrowDown.addEventListener('click', function () {
+      if (currentIndex < items.length - 1) selectYear(currentIndex + 1);
+    });
+  }
+
   // Init: velg første år
   selectYear(0, false);
 

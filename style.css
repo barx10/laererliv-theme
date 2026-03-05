@@ -86,7 +86,10 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .archive-section { max-width: 1400px; margin: 0 auto; padding: 5rem 3rem 8rem; display: grid; grid-template-columns: 160px 1fr; gap: 5rem; align-items: start; }
 .archive-years { position: sticky; top: 80px; }
 .archive-years-label { font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 1.5rem; }
-.year-wheel-wrapper { position: relative; user-select: none; }
+.year-wheel-wrapper { position: relative; user-select: none; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+.year-arrow { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; background: none; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; color: var(--muted); font-size: 1rem; transition: background 0.2s, color 0.2s, border-color 0.2s; flex-shrink: 0; }
+.year-arrow:hover { background: var(--forest); color: #fff; border-color: var(--forest); }
+.year-arrow:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
 .year-wheel-mask { position: relative; height: 240px; overflow: hidden; cursor: grab; }
 .year-wheel-mask:active { cursor: grabbing; }
 .year-wheel-mask::before,
@@ -333,7 +336,7 @@ footer { background: var(--forest); color: rgba(255,255,255,0.7); padding: 2rem 
 }
 @media (max-width: 1024px) {
   .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero-portrait { display: none; }
+  .hero-portrait { height: 50vw; max-height: 320px; }
   .featured { grid-template-columns: 1fr; gap: 3rem; }
   .posts-grid { grid-template-columns: 1fr 1fr; }
   .apps-grid { grid-template-columns: 1fr 1fr; }

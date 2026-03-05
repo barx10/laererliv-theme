@@ -60,6 +60,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
   <div class="archive-years">
     <p class="archive-years-label"><?php echo esc_html( get_theme_mod( 'laererliv_archive_years_label', 'Velg aar' ) ); ?></p>
     <div class="year-wheel-wrapper">
+      <button class="year-arrow year-arrow--up" aria-label="Forrige år">&#8593;</button>
       <div class="year-wheel-mask">
         <div class="year-wheel-highlight"></div>
         <ul class="year-list" id="year-wheel">
@@ -71,6 +72,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
           <?php endforeach; ?>
         </ul>
       </div>
+      <button class="year-arrow year-arrow--down" aria-label="Neste år">&#8595;</button>
     </div>
   </div>
   <ul class="archive-post-list">
