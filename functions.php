@@ -127,6 +127,7 @@ function laererliv_register_post_types() {
         ),
         'public'       => true,
         'has_archive'  => false,
+        'rewrite'      => array( 'slug' => 'nedlastninger', 'with_front' => false ),
         'menu_icon'    => 'dashicons-download',
         'supports'     => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
         'show_in_rest' => true,
@@ -144,6 +145,7 @@ function laererliv_register_post_types() {
         ),
         'public'       => true,
         'has_archive'  => false,
+        'rewrite'      => array( 'slug' => 'apper-og-nettsider', 'with_front' => false ),
         'menu_icon'    => 'dashicons-smartphone',
         'supports'     => array( 'title', 'editor', 'thumbnail', 'custom-fields' ),
         'show_in_rest' => true,
@@ -161,6 +163,7 @@ function laererliv_register_post_types() {
         ),
         'public'       => true,
         'has_archive'  => false,
+        'rewrite'      => array( 'slug' => 'publikasjoner', 'with_front' => false ),
         'menu_icon'    => 'dashicons-media-document',
         'supports'     => array( 'title', 'thumbnail', 'custom-fields' ),
         'show_in_rest' => true,
@@ -201,6 +204,16 @@ function laererliv_register_post_types() {
     ) );
 }
 add_action( 'init', 'laererliv_register_post_types' );
+
+/**
+ * Noindex for eventuelle CPT-arkivsider (sikkerhetsnett).
+ * Enkelt-CPT-sider beholdes indeksbare — de har unikt innhold.
+ */
+add_action( 'wp_head', function () {
+    if ( is_post_type_archive( array( 'app', 'nedlastning', 'publikasjon', 'foredrag', 'manuskonsulent' ) ) ) {
+        echo '<meta name="robots" content="noindex, follow">' . "\n";
+    }
+} );
 
 // ========================================
 // TAKSONOMIER FOR CPT
