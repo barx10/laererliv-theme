@@ -303,8 +303,8 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .pagination a:hover { border-color: var(--forest); color: var(--forest); }
 .pagination .current { background: var(--forest); color: #fff; border-color: var(--forest); }
 
-footer { background: var(--forest); color: rgba(255,255,255,0.7); padding: 5rem 3rem 2rem; }
-.footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 5rem; padding-bottom: 4rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
+footer { background: var(--forest); color: rgba(255,255,255,0.7); padding: 2rem 2rem 1rem; }
+.footer-top { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; padding-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
 .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; margin-bottom: 1rem; display: block; text-decoration: none; }
 .footer-desc { font-size: 0.85rem; line-height: 1.8; max-width: 320px; }
 .footer-col-title { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 1.5rem; }
