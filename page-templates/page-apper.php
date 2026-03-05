@@ -28,7 +28,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
 <?php endif; ?>
 
 <section class="apps-section">
-  <div class="apps-grid reveal">
+  <ul class="apps-list">
     <?php
     $apps = new WP_Query( array( 'post_type' => 'app', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
     $app_index = 0;
@@ -40,7 +40,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
         $cat_slug = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->slug : '';
         $cat_name_app = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
     ?>
-    <div class="app-card" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="animation-delay:<?php echo 0.6 + $app_index * 0.08; ?>s">
+    <li class="app-item reveal" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="transition-delay:<?php echo $app_index * 0.07; ?>s">
       <?php if ( has_post_thumbnail() ) : ?>
         <div class="app-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
       <?php elseif ( $ikon_url ) : ?>
@@ -48,15 +48,17 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
       <?php else : ?>
         <div class="app-icon"><?php echo esc_html( $emoji ?: '🔗' ); ?></div>
       <?php endif; ?>
-      <?php if ( $cat_name_app ) : ?><span class="app-tag"><?php echo esc_html( $cat_name_app ); ?></span><?php endif; ?>
-      <h3 class="app-title"><?php the_title(); ?></h3>
-      <p class="app-desc"><?php echo wp_trim_words( get_the_content(), 25 ); ?></p>
+      <div>
+        <?php if ( $cat_name_app ) : ?><p class="app-tag"><?php echo esc_html( $cat_name_app ); ?></p><?php endif; ?>
+        <p class="app-title"><?php the_title(); ?></p>
+        <p class="app-desc"><?php echo wp_trim_words( get_the_content(), 25 ); ?></p>
+      </div>
       <?php if ( $url ) : ?>
-        <a class="app-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Besoek &rarr;</a>
+        <a class="app-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Besøk &rarr;</a>
       <?php endif; ?>
-    </div>
+    </li>
     <?php $app_index++; endwhile; wp_reset_postdata(); ?>
-  </div>
+  </ul>
 </section>
 
 <?php get_footer(); ?>
