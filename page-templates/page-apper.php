@@ -51,7 +51,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
       <div>
         <?php if ( $cat_name_app ) : ?><p class="app-tag"><?php echo esc_html( $cat_name_app ); ?></p><?php endif; ?>
         <p class="app-title"><?php the_title(); ?></p>
-        <p class="app-desc"><?php echo wp_trim_words( get_the_content(), 25 ); ?></p>
+        <p class="app-desc"><?php echo wp_kses_post( get_the_content() ); ?></p>
       </div>
       <?php if ( $url ) : ?>
         <a class="app-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Besøk &rarr;</a>
