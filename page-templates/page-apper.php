@@ -28,6 +28,15 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
 <?php endif; ?>
 
 <section class="apps-section">
+  <div class="apps-pagination-nav" id="apps-pagination-nav" style="display:none">
+    <button class="apps-page-btn" id="apps-prev" aria-label="Forrige" disabled>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 13l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span class="apps-page-count"><span id="apps-page-current">1</span> / <span id="apps-page-total">1</span></span>
+    <button class="apps-page-btn" id="apps-next" aria-label="Neste">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
   <ul class="apps-list">
     <?php
     $apps = new WP_Query( array( 'post_type' => 'app', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
@@ -59,15 +68,6 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
     </li>
     <?php $app_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
-  <div class="apps-pagination-nav" id="apps-pagination-nav" style="display:none">
-    <button class="apps-page-btn" id="apps-prev" aria-label="Forrige" disabled>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 13l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <span class="apps-page-count"><span id="apps-page-current">1</span> / <span id="apps-page-total">1</span></span>
-    <button class="apps-page-btn" id="apps-next" aria-label="Neste">
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-  </div>
 </section>
 
 <?php get_footer(); ?>

@@ -172,7 +172,7 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .apps-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .apps-list { list-style: none; }
 .app-item.page-hidden { display: none !important; }
-.apps-pagination-nav { display: flex; align-items: center; justify-content: center; gap: 1.5rem; padding: 2rem 0 1rem; }
+.apps-pagination-nav { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; padding: 0 0 1.5rem; }
 .apps-page-btn { background: none; border: 1px solid var(--border); color: var(--ink); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
 .apps-page-btn:hover:not(:disabled) { border-color: var(--forest); color: var(--forest); }
 .apps-page-btn:disabled { opacity: 0.3; cursor: default; }

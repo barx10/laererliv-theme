@@ -261,6 +261,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (h > maxH) maxH = h;
       }
       appsList.style.minHeight = maxH + 'px';
+      // Gå tilbake til nåværende side etter måling
+      showAppsPage(appsCurrentPage);
     }
 
     // Reset til side 1 når filter klikkes
