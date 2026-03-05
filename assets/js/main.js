@@ -246,14 +246,35 @@ document.addEventListener('DOMContentLoaded', function () {
     if (appsPrev) appsPrev.addEventListener('click', function () { showAppsPage(appsCurrentPage - 1); });
     if (appsNext) appsNext.addEventListener('click', function () { showAppsPage(appsCurrentPage + 1); });
 
+    // Mål alle sider og lås min-height til den høyeste
+    function lockAppsHeight() {
+      appsList.style.minHeight = '';
+      var visible = getVisibleApps();
+      var totalPages = Math.ceil(visible.length / appsPerPage);
+      var maxH = 0;
+      for (var p = 0; p < totalPages; p++) {
+        visible.forEach(function (item, i) {
+          var inPage = i >= p * appsPerPage && i < (p + 1) * appsPerPage;
+          item.classList.toggle('page-hidden', !inPage);
+        });
+        var h = appsList.offsetHeight;
+        if (h > maxH) maxH = h;
+      }
+      appsList.style.minHeight = maxH + 'px';
+    }
+
     // Reset til side 1 når filter klikkes
     document.querySelectorAll('.filter-btn').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        setTimeout(function () { showAppsPage(0); }, 0);
+        setTimeout(function () {
+          showAppsPage(0);
+          requestAnimationFrame(lockAppsHeight);
+        }, 0);
       });
     });
 
     showAppsPage(0);
+    requestAnimationFrame(lockAppsHeight);
   }
 
   // ========================================
