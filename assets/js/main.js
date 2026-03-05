@@ -97,6 +97,81 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // PODCAST CAROUSEL (publikasjoner)
+  // ========================================
+  var carousel = document.getElementById('podcast-carousel');
+  if (carousel) {
+    var track = carousel.querySelector('.podcast-carousel-track');
+    // Find all embed wrappers (wp-block-embed) or standalone iframes
+    var embeds = track.querySelectorAll('.wp-block-embed, figure.wp-block-embed, iframe');
+    var slides = [];
+
+    if (embeds.length > 0) {
+      // Group: each embed + any preceding siblings (headings, paragraphs) = one slide
+      var children = Array.from(track.children);
+      var groups = [];
+      var currentGroup = [];
+
+      children.forEach(function (child) {
+        var isEmbed = child.classList.contains('wp-block-embed') || child.tagName === 'IFRAME';
+        if (isEmbed) {
+          currentGroup.push(child);
+          groups.push(currentGroup);
+          currentGroup = [];
+        } else {
+          currentGroup.push(child);
+        }
+      });
+      // Leftover non-embed nodes at the end (unlikely but safe)
+      if (currentGroup.length) groups.push(currentGroup);
+
+      // Wrap each group in a podcast-slide div
+      track.innerHTML = '';
+      groups.forEach(function (group, i) {
+        var slide = document.createElement('div');
+        slide.className = 'podcast-slide' + (i === 0 ? ' active' : '');
+        slide.setAttribute('data-slide', i);
+        group.forEach(function (el) { slide.appendChild(el); });
+        track.appendChild(slide);
+      });
+
+      slides = track.querySelectorAll('.podcast-slide');
+    }
+
+    var prevBtn = carousel.querySelector('.podcast-prev');
+    var nextBtn = carousel.querySelector('.podcast-next');
+    var counter = document.getElementById('podcast-current');
+    var total = document.getElementById('podcast-total');
+    var current = 0;
+
+    if (total) total.textContent = slides.length;
+    if (slides.length <= 1) {
+      var nav = carousel.querySelector('.podcast-nav');
+      if (nav) nav.style.display = 'none';
+    }
+
+    function showSlide(index) {
+      slides.forEach(function (s) { s.classList.remove('active'); });
+      slides[index].classList.add('active');
+      current = index;
+      if (counter) counter.textContent = index + 1;
+      if (prevBtn) prevBtn.disabled = index === 0;
+      if (nextBtn) nextBtn.disabled = index === slides.length - 1;
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        if (current > 0) showSlide(current - 1);
+      });
+    }
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        if (current < slides.length - 1) showSlide(current + 1);
+      });
+    }
+  }
+
+  // ========================================
   // READ PROGRESS BAR (single.php)
   // ========================================
   var progressBar = document.getElementById('read-progress');

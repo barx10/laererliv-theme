@@ -71,8 +71,19 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
     <div class="section-divider">
       <p class="section-divider-label">Podkast</p>
     </div>
-    <div class="pub-embeds">
-      <?php the_content(); ?>
+    <div class="podcast-carousel" id="podcast-carousel">
+      <div class="podcast-carousel-track">
+        <?php the_content(); ?>
+      </div>
+      <div class="podcast-nav">
+        <button class="podcast-arrow podcast-prev" type="button" aria-label="Forrige episode" disabled>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 15l-5-5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="podcast-counter"><span id="podcast-current">1</span> / <span id="podcast-total">1</span></span>
+        <button class="podcast-arrow podcast-next" type="button" aria-label="Neste episode">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
     </div>
   </div>
   <?php endif; endwhile; ?>
