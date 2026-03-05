@@ -337,8 +337,8 @@ footer { background: var(--forest); color: rgba(255,255,255,0.7); padding: 2rem 
 }
 @media (max-width: 1024px) {
   .hero { grid-template-columns: 1fr; min-height: auto; }
-  .hero-portrait { height: 60vw; max-height: 380px; }
-  .hero-portrait-img { object-fit: contain; object-position: center center; }
+  .hero-portrait { height: auto; max-height: none; }
+  .hero-portrait-img { height: auto; object-fit: initial; object-position: initial; }
   .featured { grid-template-columns: 1fr; gap: 3rem; }
   .posts-grid { grid-template-columns: 1fr 1fr; }
   .footer-top { grid-template-columns: 1fr 1fr; }
