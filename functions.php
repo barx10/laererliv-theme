@@ -163,7 +163,7 @@ function laererliv_register_post_types() {
         ),
         'public'       => true,
         'has_archive'  => false,
-        'rewrite'      => array( 'slug' => 'publikasjoner', 'with_front' => false ),
+        'rewrite'      => array( 'slug' => 'andre-publikasjoner', 'with_front' => false ),
         'menu_icon'    => 'dashicons-media-document',
         'supports'     => array( 'title', 'thumbnail', 'custom-fields' ),
         'show_in_rest' => true,
