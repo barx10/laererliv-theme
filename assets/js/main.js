@@ -69,6 +69,34 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // DOWNLOAD ACCORDION (nedlastninger)
+  // ========================================
+  var dlHeaders = document.querySelectorAll('.download-header');
+  if (dlHeaders.length) {
+    dlHeaders.forEach(function (header) {
+      header.addEventListener('click', function () {
+        var item = header.closest('.download-item');
+        var panel = item.querySelector('.download-panel');
+        var isOpen = item.classList.contains('open');
+
+        // Close all others
+        document.querySelectorAll('.download-item.open').forEach(function (openItem) {
+          if (openItem !== item) {
+            openItem.classList.remove('open');
+            openItem.querySelector('.download-header').setAttribute('aria-expanded', 'false');
+            openItem.querySelector('.download-panel').setAttribute('aria-hidden', 'true');
+          }
+        });
+
+        // Toggle this one
+        item.classList.toggle('open', !isOpen);
+        header.setAttribute('aria-expanded', !isOpen ? 'true' : 'false');
+        panel.setAttribute('aria-hidden', isOpen ? 'true' : 'false');
+      });
+    });
+  }
+
+  // ========================================
   // READ PROGRESS BAR (single.php)
   // ========================================
   var progressBar = document.getElementById('read-progress');

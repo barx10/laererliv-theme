@@ -30,7 +30,7 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
 <section class="downloads-section">
   <ul class="downloads-list">
     <?php
-    $downloads = new WP_Query( array( 'post_type' => 'nedlastning', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
+    $downloads = new WP_Query( array( 'post_type' => 'nedlastning', 'posts_per_page' => -1, 'meta_key' => '_nedlastning_aar', 'orderby' => 'meta_value_num', 'order' => 'DESC' ) );
     $dl_index = 0;
     while ( $downloads->have_posts() ) : $downloads->the_post();
         $filtype  = get_post_meta( get_the_ID(), '_nedlastning_filtype', true );
@@ -43,28 +43,34 @@ if ( ! empty( $dl_cats ) && ! is_wp_error( $dl_cats ) ) : ?>
         $icon_class = strtolower( $filtype );
     ?>
     <li class="download-item reveal" data-category="<?php echo esc_attr( $cat_slug ); ?>" style="transition-delay:<?php echo $dl_index * 0.07; ?>s">
-      <?php if ( $fil_url ) : ?><a href="<?php echo esc_url( $fil_url ); ?>" target="_blank" rel="noopener" class="download-item-link"><?php endif; ?>
-      <?php if ( has_post_thumbnail() ) : ?>
-        <div class="download-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
-      <?php else : ?>
-        <div class="download-icon <?php echo esc_attr( $icon_class ); ?>"><?php echo esc_html( strtoupper( $filtype ?: 'PDF' ) ); ?></div>
-      <?php endif; ?>
-      <div class="download-body">
-        <?php if ( $cat_name_dl ) : ?><p class="download-tag"><?php echo esc_html( $cat_name_dl ); ?></p><?php endif; ?>
+      <button class="download-header" type="button" aria-expanded="false">
+        <span class="download-badge <?php echo esc_attr( $icon_class ); ?>"><?php echo esc_html( strtoupper( $filtype ?: 'PDF' ) ); ?></span>
         <h3 class="download-title"><?php the_title(); ?></h3>
-        <p class="download-desc"><?php echo wp_trim_words( get_the_content(), 30 ); ?></p>
-        <?php if ( $filtype || $filstr || $aar ) : ?>
-          <p class="download-meta">
-            <?php echo esc_html( strtoupper( $filtype ) ); ?>
-            <?php if ( $filstr ) echo ' &middot; ' . esc_html( $filstr ); ?>
-            <?php if ( $aar ) echo ' &middot; ' . esc_html( $aar ); ?>
-          </p>
-        <?php endif; ?>
+        <?php if ( $cat_name_dl ) : ?><span class="download-tag"><?php echo esc_html( $cat_name_dl ); ?></span><?php endif; ?>
+        <?php if ( $aar ) : ?><span class="download-year"><?php echo esc_html( $aar ); ?></span><?php endif; ?>
+        <span class="download-chevron" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </button>
+      <div class="download-panel" aria-hidden="true">
+        <div class="download-panel-inner">
+          <?php if ( has_post_thumbnail() ) : ?>
+            <div class="download-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
+          <?php endif; ?>
+          <div class="download-body">
+            <p class="download-desc"><?php echo wp_trim_words( get_the_content(), 30 ); ?></p>
+            <?php if ( $filtype || $filstr ) : ?>
+              <p class="download-meta">
+                <?php echo esc_html( strtoupper( $filtype ) ); ?>
+                <?php if ( $filstr ) echo ' &middot; ' . esc_html( $filstr ); ?>
+              </p>
+            <?php endif; ?>
+          </div>
+          <?php if ( $fil_url ) : ?>
+            <a href="<?php echo esc_url( $fil_url ); ?>" target="_blank" rel="noopener" class="download-btn">&darr; Last ned</a>
+          <?php endif; ?>
+        </div>
       </div>
-      <div class="download-actions">
-        <span class="download-btn">&darr; Last ned</span>
-      </div>
-      <?php if ( $fil_url ) : ?></a><?php endif; ?>
     </li>
     <?php $dl_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
