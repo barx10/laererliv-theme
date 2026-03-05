@@ -2,7 +2,8 @@
   <div class="footer-top">
     <div>
       <a class="footer-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">L&aelig;rerliv</a>
-      <p class="footer-desc"><?php echo esc_html( get_theme_mod( 'laererliv_footer_desc', 'Kenneth skriver om skole, undervisning, teknologi og det som skjer naar disse verdener moetes. Lektor ved ungdomsskole i Oslo.' ) ); ?></p>
+      <p class="footer-desc"><?php echo esc_html( get_theme_mod( 'laererliv_footer_desc', 'Tanker om skole, teknologi og alt som er imellom.' ) ); ?></p>
+      <img class="footer-logo-img" src="<?php echo esc_url( get_template_directory_uri() . '/assets/img/laererliv-logo.png' ); ?>" alt="L&aelig;rerliv logo" />
     </div>
     <div>
       <p class="footer-col-title">Sider</p>
