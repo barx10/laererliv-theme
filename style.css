@@ -47,8 +47,8 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .hero-cta:hover { gap: 1.25rem; color: var(--gold); border-color: var(--gold); }
 .hero-portrait { position: relative; background: #1a1a18; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .hero-portrait-svg { width: 100%; height: 100%; background: #1a1a18; }
-.hero-portrait-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%) contrast(1.1); display: block; }
-.hero-portrait-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,14,12,0.75) 0%, transparent 55%); pointer-events: none; }
+.hero-portrait-img { width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: grayscale(100%) contrast(1.1); display: block; opacity: 0.55; }
+.hero-portrait-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(14,14,12,0.85) 0%, transparent 70%); pointer-events: none; }
 .hero-portrait-caption { position: absolute; bottom: 2.5rem; left: 2.5rem; right: 2.5rem; }
 .hero-portrait-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 400; color: #fff; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
 .hero-portrait-role { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
