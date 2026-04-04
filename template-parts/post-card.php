@@ -6,7 +6,7 @@ $cat_name = ! empty( $cats ) ? $cats[0]->name : '';
   <a class="post-card-link" href="<?php the_permalink(); ?>">
     <?php if ( has_post_thumbnail() ) : ?>
     <div class="post-card-img">
-      <?php the_post_thumbnail( 'post-card' ); ?>
+      <?php the_post_thumbnail( 'post-card', array( 'alt' => get_the_title() ) ); ?>
     </div>
     <?php endif; ?>
     <?php if ( $cat_name ) : ?>

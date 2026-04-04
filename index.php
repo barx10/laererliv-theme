@@ -5,7 +5,7 @@
 <section class="hero">
   <div class="hero-text">
     <p class="hero-eyebrow"><?php echo esc_html( get_theme_mod( 'laererliv_hero_eyebrow', 'Fra klasserom til storsamfunn' ) ); ?></p>
-    <h1 class="hero-headline"><?php echo wp_kses_post( get_theme_mod( 'laererliv_hero_headline', 'Tanker om <em>skole</em>, teknologi og alt imellom' ) ); ?></h1>
+    <h1 class="hero-headline"><?php echo wp_kses_post( get_theme_mod( 'laererliv_hero_headline', 'Ressurser og artikler om <em>skole</em>, teknologi og KI – for lærere' ) ); ?></h1>
     <p class="hero-sub"><?php echo esc_html( get_theme_mod( 'laererliv_hero_sub', 'Kenneth Bareksten skriver om undervisning, digital kompetanse og hva som skjer naar laerere tar pennen.' ) ); ?></p>
     <?php $cta_text = get_theme_mod( 'laererliv_hero_cta_text', 'Les innleggene' ); if ( $cta_text ) : ?>
     <a class="hero-cta" href="<?php echo esc_url( get_theme_mod( 'laererliv_hero_cta_url', '#featured' ) ); ?>"><?php echo esc_html( $cta_text ); ?> &rarr;</a>
@@ -40,7 +40,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
     <a class="hero-cta" href="<?php the_permalink(); ?>">Les videre &rarr;</a>
   </div>
   <div class="featured-img">
-    <?php if ( has_post_thumbnail() ) the_post_thumbnail( 'featured-large' ); ?>
+    <?php if ( has_post_thumbnail() ) the_post_thumbnail( 'featured-large', array( 'alt' => get_the_title() ) ); ?>
     <?php if ( $cat_name ) : ?><span class="featured-img-label"><?php echo esc_html( $cat_name ); ?></span><?php endif; ?>
   </div>
 </section>

@@ -569,7 +569,7 @@ function laererliv_customize_register( $wp_customize ) {
 
     // Overskrift
     $wp_customize->add_setting( 'laererliv_hero_headline', array(
-        'default'           => 'Tanker om <em>skole</em>, teknologi og alt imellom',
+        'default'           => 'Ressurser og artikler om <em>skole</em>, teknologi og KI – for lærere',
         'sanitize_callback' => 'wp_kses_post',
     ) );
     $wp_customize->add_control( 'laererliv_hero_headline', array(
