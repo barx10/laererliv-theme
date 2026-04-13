@@ -20,6 +20,7 @@ get_header(); ?>
       <?php while ( have_posts() ) : the_post(); ?>
         <?php the_content(); ?>
       <?php endwhile; ?>
+      <span id="kontakt" class="kontakt-anchor" aria-hidden="true"></span>
     </div>
     <div class="about-sidebar">
 

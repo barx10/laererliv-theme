@@ -29,7 +29,7 @@
     <div>
       <p class="footer-col-title">Kontakt</p>
       <ul class="footer-links">
-        <li><a href="<?php echo esc_url( get_permalink( get_page_by_path( 'om-laererliv' ) ) ); ?>">Kontakt</a></li>
+        <li><a href="<?php echo esc_url( get_permalink( get_page_by_path( 'om-laererliv' ) ) . '#kontakt' ); ?>">Kontakt</a></li>
         <?php
         $link1_text = get_theme_mod( 'laererliv_footer_link1_text', 'Utdanningsnytt' );
         $link1_url  = get_theme_mod( 'laererliv_footer_link1_url', 'https://www.utdanningsnytt.no' );
