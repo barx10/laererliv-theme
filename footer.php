@@ -29,12 +29,7 @@
     <div>
       <p class="footer-col-title">Kontakt</p>
       <ul class="footer-links">
-        <?php
-        $footer_email             = get_theme_mod( 'laererliv_footer_email', 'kenneth@laererliv.no' );
-        $footer_email_obfuscated  = antispambot( $footer_email );
-        $footer_mailto_obfuscated = antispambot( $footer_email, 1 );
-        ?>
-        <li><a href="mailto:<?php echo $footer_mailto_obfuscated; ?>"><?php echo $footer_email_obfuscated; ?></a></li>
+        <li><a href="<?php echo esc_url( get_permalink( get_page_by_path( 'om-laererliv' ) ) ); ?>">Kontakt</a></li>
         <?php
         $link1_text = get_theme_mod( 'laererliv_footer_link1_text', 'Utdanningsnytt' );
         $link1_url  = get_theme_mod( 'laererliv_footer_link1_url', 'https://www.utdanningsnytt.no' );
