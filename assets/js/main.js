@@ -1,6 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   // ========================================
+  // SCROLL TIL KONTAKTSKJEMA (om-siden)
+  // ========================================
+  // Når siden åpnes med #kontakt i URL-en, scroll til bunnen av
+  // .about-body der kontaktskjemaet ligger. Vi venter til window.load
+  // slik at all content (inkl. skjemaet) har rendret og vi kan måle
+  // korrekt høyde, og overstyrer eventuell native anchor-scroll.
+  if (window.location.hash === '#kontakt') {
+    window.addEventListener('load', function () {
+      var target = document.getElementById('kontakt');
+      if (!target) return;
+      setTimeout(function () {
+        target.scrollIntoView({ block: 'end', behavior: 'smooth' });
+      }, 50);
+    });
+  }
+
+  // ========================================
   // HEADER SCROLL SHADOW
   // ========================================
   var header = document.getElementById('site-header');
