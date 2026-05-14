@@ -61,7 +61,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
       <div>
         <?php if ( $cat_name_app ) : ?><p class="app-tag"><?php echo esc_html( $cat_name_app ); ?></p><?php endif; ?>
         <p class="app-title"><?php the_title(); ?></p>
-        <p class="app-desc"><?php echo wp_kses_post( get_the_content() ); ?></p>
+        <div class="app-desc"><?php echo wp_kses_post( get_the_content() ); ?></div>
       </div>
       <?php if ( $url ) : ?>
         <a class="app-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Besøk &rarr;</a>
@@ -86,7 +86,7 @@ if ( $lokale->have_posts() ) : ?>
       </div>
       <div>
         <p class="app-title"><?php the_title(); ?></p>
-        <p class="app-desc"><?php echo wp_kses_post( get_the_content() ); ?></p>
+        <div class="app-desc"><?php echo wp_kses_post( get_the_content() ); ?></div>
       </div>
       <?php if ( $github_url ) : ?>
         <a class="app-link" href="<?php echo esc_url( $github_url ); ?>" target="_blank" rel="noopener">Se på GitHub &rarr;</a>

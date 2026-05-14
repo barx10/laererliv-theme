@@ -78,7 +78,7 @@ add_action( 'load-themes.php', 'laererliv_auto_assign_menus' );
  * Gutenberg skjuler metaboksene — klassisk editor viser dem tydelig.
  */
 function laererliv_disable_gutenberg_for_cpts( $use_block_editor, $post_type ) {
-    $classic_types = array( 'nedlastning', 'app', 'publikasjon', 'foredrag', 'manuskonsulent' );
+    $classic_types = array( 'nedlastning', 'app', 'publikasjon', 'foredrag', 'manuskonsulent', 'lokalt-prosjekt' );
     if ( in_array( $post_type, $classic_types ) ) {
         return false;
     }
