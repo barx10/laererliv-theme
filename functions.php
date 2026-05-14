@@ -460,6 +460,11 @@ function laererliv_manuskonsulent_meta_box( $post ) {
     <?php
 }
 
+add_filter( 'manage_lokalt-prosjekt_posts_columns', function( $cols ) {
+    unset( $cols['thumbnail'] );
+    return $cols;
+} );
+
 function laererliv_lokalt_prosjekt_meta_box( $post ) {
     wp_nonce_field( 'laererliv_lokalt_prosjekt_nonce', 'laererliv_lokalt_prosjekt_nonce' );
     $github_url = get_post_meta( $post->ID, '_prosjekt_github_url', true );
