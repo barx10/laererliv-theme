@@ -188,6 +188,25 @@ function laererliv_register_post_types() {
         'show_in_rest' => true,
     ) );
 
+    // Lokale prosjekter (GitHub-repos uten deploy)
+    register_post_type( 'lokalt-prosjekt', array(
+        'labels' => array(
+            'name'          => 'Lokale prosjekter',
+            'singular_name' => 'Lokalt prosjekt',
+            'add_new'       => 'Legg til prosjekt',
+            'add_new_item'  => 'Legg til nytt prosjekt',
+            'edit_item'     => 'Rediger prosjekt',
+            'all_items'     => 'Alle prosjekter',
+        ),
+        'public'       => false,
+        'show_ui'      => true,
+        'has_archive'  => false,
+        'rewrite'      => false,
+        'menu_icon'    => 'dashicons-editor-code',
+        'supports'     => array( 'title', 'editor', 'page-attributes' ),
+        'show_in_rest' => true,
+    ) );
+
     // Manuskonsulent (vises kun på om-siden, trenger ikke egne URL-er)
     register_post_type( 'manuskonsulent', array(
         'labels' => array(
@@ -280,6 +299,9 @@ function laererliv_add_meta_boxes() {
 
     // Manuskonsulent: oppdragsgiver, år, lenke
     add_meta_box( 'manuskonsulent_detaljer', 'Oppdragsdetaljer', 'laererliv_manuskonsulent_meta_box', 'manuskonsulent', 'normal', 'high' );
+
+    // Lokalt prosjekt: GitHub-lenke
+    add_meta_box( 'lokalt_prosjekt_detaljer', 'Prosjektdetaljer', 'laererliv_lokalt_prosjekt_meta_box', 'lokalt-prosjekt', 'normal', 'high' );
 }
 add_action( 'add_meta_boxes', 'laererliv_add_meta_boxes' );
 
@@ -438,6 +460,22 @@ function laererliv_manuskonsulent_meta_box( $post ) {
     <?php
 }
 
+function laererliv_lokalt_prosjekt_meta_box( $post ) {
+    wp_nonce_field( 'laererliv_lokalt_prosjekt_nonce', 'laererliv_lokalt_prosjekt_nonce' );
+    $github_url = get_post_meta( $post->ID, '_prosjekt_github_url', true );
+    ?>
+    <p>
+        <label><strong>GitHub-lenke:</strong></label><br>
+        <input type="url" name="_prosjekt_github_url" value="<?php echo esc_url( $github_url ); ?>" style="width:100%;" placeholder="https://github.com/bruker/repo">
+        <?php if ( $github_url ) : ?>
+            <br><small style="color:green;">✓ Lenke er satt — <a href="<?php echo esc_url( $github_url ); ?>" target="_blank">åpne repo</a></small>
+        <?php else : ?>
+            <br><small style="color:#B8965A;">⚠ Lim inn GitHub-URL til repoet</small>
+        <?php endif; ?>
+    </p>
+    <?php
+}
+
 function laererliv_save_meta( $post_id ) {
     // Nedlastning
     if ( isset( $_POST['laererliv_nedlastning_nonce'] ) && wp_verify_nonce( $_POST['laererliv_nedlastning_nonce'], 'laererliv_nedlastning_nonce' ) ) {
@@ -473,6 +511,11 @@ function laererliv_save_meta( $post_id ) {
         if ( isset( $_POST['_manus_oppdragsgiver'] ) ) update_post_meta( $post_id, '_manus_oppdragsgiver', sanitize_text_field( $_POST['_manus_oppdragsgiver'] ) );
         if ( isset( $_POST['_manus_aar'] ) ) update_post_meta( $post_id, '_manus_aar', sanitize_text_field( $_POST['_manus_aar'] ) );
         if ( isset( $_POST['_manus_url'] ) ) update_post_meta( $post_id, '_manus_url', esc_url_raw( $_POST['_manus_url'] ) );
+    }
+
+    // Lokalt prosjekt
+    if ( isset( $_POST['laererliv_lokalt_prosjekt_nonce'] ) && wp_verify_nonce( $_POST['laererliv_lokalt_prosjekt_nonce'], 'laererliv_lokalt_prosjekt_nonce' ) ) {
+        if ( isset( $_POST['_prosjekt_github_url'] ) ) update_post_meta( $post_id, '_prosjekt_github_url', esc_url_raw( $_POST['_prosjekt_github_url'] ) );
     }
 }
 add_action( 'save_post', 'laererliv_save_meta' );
