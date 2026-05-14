@@ -169,8 +169,8 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .download-btn { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.6rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); background: none; border: 1px solid var(--forest); padding: 0.55rem 1.1rem; cursor: pointer; font-family: 'Outfit', sans-serif; transition: background 0.25s, color 0.25s; text-decoration: none; white-space: nowrap; border-radius: 3px; align-self: center; flex-shrink: 0; }
 .download-btn:hover { background: var(--forest); color: #fff; }
 
-.apps-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 0; }
-.section-group-label { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+.apps-section { max-width: 1400px; margin: 0 auto; padding: 0 3rem 0; }
+.section-group-label { font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); font-weight: 500; padding: 3rem 0 0.5rem; border-bottom: 1px solid var(--border); margin-bottom: 0; }
 .apps-list { list-style: none; }
 .app-item.page-hidden { display: none !important; }
 .apps-pagination-nav { display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 0 0 1.5rem; }
@@ -194,18 +194,14 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .app-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s; }
 .app-link:hover { color: var(--gold); }
 
-.projects-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
+.projects-section { max-width: 1400px; margin: 0 auto; padding: 0 3rem 8rem; }
 .projects-list { list-style: none; }
 .project-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 2rem; align-items: center; padding: 2rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease; }
 .project-item:first-child { border-top: 1px solid var(--border); }
 .project-item:hover { background: var(--cream); }
-.project-icon { width: 64px; height: 64px; background: var(--ink); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--paper); flex-shrink: 0; transition: transform 0.25s ease; }
+.project-icon { width: 80px; height: 80px; background: var(--ink); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--paper); flex-shrink: 0; transition: transform 0.25s ease; }
 .project-item:hover .project-icon { transform: scale(1.05); }
-.project-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 400; line-height: 1.35; margin-bottom: 0.35rem; transition: color 0.2s; }
-.project-item:hover .project-title { color: var(--forest); }
-.project-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
-.project-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s; }
-.project-link:hover { color: var(--gold); }
+.project-item:hover .app-title { color: var(--forest); }
 
 .publications-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .publications-list { list-style: none; }
