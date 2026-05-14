@@ -196,12 +196,12 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 
 .projects-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .projects-list { list-style: none; }
-.project-item { display: grid; grid-template-columns: 48px 1fr auto; gap: 2rem; align-items: center; padding: 1.75rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease; }
+.project-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 2rem; align-items: center; padding: 2rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease; }
 .project-item:first-child { border-top: 1px solid var(--border); }
 .project-item:hover { background: var(--cream); }
-.project-icon { width: 44px; height: 44px; background: var(--ink); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--paper); flex-shrink: 0; transition: transform 0.25s ease; }
+.project-icon { width: 64px; height: 64px; background: var(--ink); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--paper); flex-shrink: 0; transition: transform 0.25s ease; }
 .project-item:hover .project-icon { transform: scale(1.05); }
-.project-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 400; margin-bottom: 0.3rem; transition: color 0.2s; }
+.project-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 400; line-height: 1.35; margin-bottom: 0.35rem; transition: color 0.2s; }
 .project-item:hover .project-title { color: var(--forest); }
 .project-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
 .project-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s; }
