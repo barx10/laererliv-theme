@@ -193,6 +193,22 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .app-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s; }
 .app-link:hover { color: var(--gold); }
 
+.projects-section { max-width: 1400px; margin: 0 auto; padding: 0 3rem 8rem; border-top: 1px solid var(--border); }
+.projects-header { padding: 4rem 0 2.5rem; }
+.projects-heading { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 400; margin: 0.4rem 0 0.75rem; }
+.projects-intro { font-size: 0.9rem; color: var(--muted); }
+.projects-list { list-style: none; }
+.project-item { display: grid; grid-template-columns: 48px 1fr auto; gap: 2rem; align-items: center; padding: 1.75rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease; }
+.project-item:first-child { border-top: 1px solid var(--border); }
+.project-item:hover { background: var(--cream); }
+.project-icon { width: 44px; height: 44px; background: var(--ink); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--paper); flex-shrink: 0; transition: transform 0.25s ease; }
+.project-item:hover .project-icon { transform: scale(1.05); }
+.project-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 400; margin-bottom: 0.3rem; transition: color 0.2s; }
+.project-item:hover .project-title { color: var(--forest); }
+.project-desc { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+.project-link { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--forest); text-decoration: none; white-space: nowrap; transition: color 0.25s; }
+.project-link:hover { color: var(--gold); }
+
 .publications-section { max-width: 1400px; margin: 0 auto; padding: 4rem 3rem 8rem; }
 .publications-list { list-style: none; }
 .pub-item { display: grid; grid-template-columns: auto 1fr auto; gap: 2rem; align-items: center; padding: 2rem 2rem; margin: 0 -2rem; border-bottom: 1px solid var(--border); transition: background 0.3s ease, opacity 0.5s ease, transform 0.5s ease; }
@@ -384,6 +400,9 @@ nav.main-nav.open a {
   .posts-grid { grid-template-columns: 1fr; padding: 0 1.5rem; }
   .app-item { grid-template-columns: 1fr auto !important; padding: 1.5rem 1rem; margin: 0 -1rem; }
   .app-item .app-thumb, .app-item .app-icon { display: none; }
+  .project-item { grid-template-columns: 1fr auto !important; padding: 1.5rem 1rem; margin: 0 -1rem; }
+  .project-item .project-icon { display: none; }
+  .projects-section { padding-left: 1.5rem; padding-right: 1.5rem; }
   .section-header { padding: 3rem 1.5rem 1.5rem; }
   .archive-section { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
   .archive-years { position: static; }
