@@ -76,6 +76,15 @@ $lokale = new WP_Query( array( 'post_type' => 'lokalt-prosjekt', 'posts_per_page
 if ( $lokale->have_posts() ) : ?>
 <section class="projects-section">
   <p class="section-group-label">Lokale prosjekter</p>
+  <div class="apps-pagination-nav" id="projects-pagination-nav" style="display:none">
+    <button class="apps-page-btn" id="projects-prev" aria-label="Forrige" disabled>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 13l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span class="apps-page-count"><span id="projects-page-current">1</span> / <span id="projects-page-total">1</span></span>
+    <button class="apps-page-btn" id="projects-next" aria-label="Neste">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 5l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
   <ul class="projects-list">
     <?php while ( $lokale->have_posts() ) : $lokale->the_post();
         $github_url = get_post_meta( get_the_ID(), '_prosjekt_github_url', true );

@@ -313,6 +313,66 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // PROSJEKT PAGINERING (lokale prosjekter, 3 og 3)
+  // ========================================
+  var projPagNav = document.getElementById('projects-pagination-nav');
+  if (projPagNav) {
+    var projList = document.querySelector('.projects-list');
+    var projPrev = document.getElementById('projects-prev');
+    var projNext = document.getElementById('projects-next');
+    var projPageCurrent = document.getElementById('projects-page-current');
+    var projPageTotal = document.getElementById('projects-page-total');
+    var projPerPage = 3;
+    var projCurrentPage = 0;
+
+    function getVisibleProjects() {
+      return Array.from(projList.querySelectorAll('.project-item:not(.page-hidden-proj)'));
+    }
+
+    function showProjectsPage(page) {
+      var visible = getVisibleProjects();
+      var totalPages = Math.ceil(visible.length / projPerPage);
+      if (page < 0) page = 0;
+      if (page >= totalPages) page = totalPages - 1;
+      projCurrentPage = page;
+
+      visible.forEach(function (item, i) {
+        var inPage = i >= page * projPerPage && i < (page + 1) * projPerPage;
+        item.classList.toggle('page-hidden', !inPage);
+      });
+
+      if (projPageCurrent) projPageCurrent.textContent = page + 1;
+      if (projPageTotal) projPageTotal.textContent = totalPages || 1;
+      if (projPrev) projPrev.disabled = page === 0;
+      if (projNext) projNext.disabled = page >= totalPages - 1;
+      projPagNav.style.display = totalPages > 1 ? 'flex' : 'none';
+    }
+
+    function lockProjectsHeight() {
+      projList.style.minHeight = '';
+      var visible = getVisibleProjects();
+      var totalPages = Math.ceil(visible.length / projPerPage);
+      var maxH = 0;
+      for (var p = 0; p < totalPages; p++) {
+        visible.forEach(function (item, i) {
+          var inPage = i >= p * projPerPage && i < (p + 1) * projPerPage;
+          item.classList.toggle('page-hidden', !inPage);
+        });
+        var h = projList.offsetHeight;
+        if (h > maxH) maxH = h;
+      }
+      projList.style.minHeight = maxH + 'px';
+      showProjectsPage(projCurrentPage);
+    }
+
+    if (projPrev) projPrev.addEventListener('click', function () { showProjectsPage(projCurrentPage - 1); });
+    if (projNext) projNext.addEventListener('click', function () { showProjectsPage(projCurrentPage + 1); });
+
+    showProjectsPage(0);
+    requestAnimationFrame(lockProjectsHeight);
+  }
+
+  // ========================================
   // YEAR WHEEL (arkiv)
   // ========================================
   var wheel = document.getElementById('year-wheel');
