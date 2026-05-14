@@ -326,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var projCurrentPage = 0;
 
     function getVisibleProjects() {
-      return Array.from(projList.querySelectorAll('.project-item:not(.page-hidden)'));
+      return Array.from(projList.querySelectorAll('.project-item'));
     }
 
     function showProjectsPage(page) {
