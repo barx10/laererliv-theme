@@ -28,6 +28,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
 <?php endif; ?>
 
 <section class="apps-section">
+  <p class="page-eyebrow" style="padding: 3rem 0 1rem;">Lanserte prosjekter</p>
   <div class="apps-pagination-nav" id="apps-pagination-nav" style="display:none">
     <button class="apps-page-btn" id="apps-prev" aria-label="Forrige" disabled>
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 13l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
