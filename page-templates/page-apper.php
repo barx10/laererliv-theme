@@ -28,7 +28,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
 <?php endif; ?>
 
 <section class="apps-section">
-  <p class="page-eyebrow" style="padding: 3rem 0 1rem;">Lanserte prosjekter</p>
+  <p class="section-group-label">Lanserte prosjekter</p>
   <div class="apps-pagination-nav" id="apps-pagination-nav" style="display:none">
     <button class="apps-page-btn" id="apps-prev" aria-label="Forrige" disabled>
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11 13l-4-4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -75,11 +75,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
 $lokale = new WP_Query( array( 'post_type' => 'lokalt-prosjekt', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
 if ( $lokale->have_posts() ) : ?>
 <section class="projects-section">
-  <div class="projects-header">
-    <p class="page-eyebrow">Lokale prosjekter</p>
-    <h2 class="projects-heading">Verktøy som kjøres <em>lokalt</em></h2>
-    <p class="projects-intro">Repoer som ikke er deployert — last ned og kjør på din egen maskin.</p>
-  </div>
+  <p class="section-group-label">Lokale prosjekter</p>
   <ul class="projects-list">
     <?php while ( $lokale->have_posts() ) : $lokale->the_post();
         $github_url = get_post_meta( get_the_ID(), '_prosjekt_github_url', true );
