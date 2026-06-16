@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   // ========================================
-  // SCROLL TIL KONTAKTSKJEMA (om-siden)
+  // SCROLL TIL KONTAKT (om-siden)
   // ========================================
-  // Når siden åpnes med #kontakt i URL-en, scroll til bunnen av
-  // dokumentet der kontaktskjemaet ligger. Vi slår av browserens
-  // native scroll-restoration og anchor-scroll, venter til alt er
-  // lastet (inkl. bilder/skjema-iframe), og scroller selv.
+  // Når siden åpnes med #kontakt i URL-en, scroll til kontaktblokken.
+  // Vi slår av browserens native scroll-restoration og anchor-scroll,
+  // venter til alt er lastet (inkl. bilder), og scroller selv.
   if (window.location.hash === '#kontakt') {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
@@ -14,20 +13,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // Overstyr native anchor-scroll umiddelbart
     window.scrollTo(0, 0);
 
-    var scrollToBottom = function () {
-      window.scrollTo({
-        top: document.documentElement.scrollHeight,
-        behavior: 'smooth'
-      });
+    var scrollToKontakt = function () {
+      var el = document.getElementById('kontakt');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     };
 
     if (document.readyState === 'complete') {
-      scrollToBottom();
+      scrollToKontakt();
     } else {
       window.addEventListener('load', function () {
         // Dobbel rAF for å garantere at layout er ferdig
         requestAnimationFrame(function () {
-          requestAnimationFrame(scrollToBottom);
+          requestAnimationFrame(scrollToKontakt);
         });
       });
     }
