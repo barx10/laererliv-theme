@@ -26,6 +26,24 @@ function laererliv_setup() {
 }
 add_action( 'after_setup_theme', 'laererliv_setup' );
 
+// ========================================
+// SLÅ AV KOMMENTARER OG PINGBACKS
+// ========================================
+// Bloggen bruker ikke kommentarer, og de er en vanlig kilde til spam.
+// Vi fjerner kommentarstøtte temaomfattende. Reversibelt: slett blokken.
+function laererliv_deaktiver_kommentarer() {
+    foreach ( get_post_types() as $pt ) {
+        remove_post_type_support( $pt, 'comments' );
+        remove_post_type_support( $pt, 'trackbacks' );
+    }
+}
+add_action( 'init', 'laererliv_deaktiver_kommentarer' );
+add_filter( 'comments_open', '__return_false', 20, 2 );
+add_filter( 'pings_open',    '__return_false', 20, 2 );
+add_filter( 'comments_array', '__return_empty_array', 10, 2 );
+// Skjul «Kommentarer» i admin-menyen
+add_action( 'admin_menu', function () { remove_menu_page( 'edit-comments.php' ); } );
+
 /**
  * Auto-tilordne menyer til menyplasseringer ved temabytte.
  * Leter etter menyer kalt «Hovedmeny»/«primary» og «Footermeny»/«footer»

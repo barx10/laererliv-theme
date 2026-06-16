@@ -252,6 +252,8 @@ nav.main-nav a:hover, nav.main-nav a.current-menu-item { color: var(--ink); }
 .about-sidebar { position: sticky; top: 80px; }
 .about-photo { width: 100%; aspect-ratio: 3/4; background: var(--cream); overflow: hidden; margin-bottom: 2rem; }
 .about-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.1); }
+.about-contact { margin-top: 3rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+.about-contact p { font-size: 1.05rem; line-height: 1.8; color: var(--ink); font-weight: 300; margin-bottom: 1.25rem; }
 .cv-block { border-top: 1px solid var(--border); padding-top: 1.5rem; margin-bottom: 2rem; }
 .cv-label { font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); font-weight: 500; margin-bottom: 1rem; }
 .cv-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
