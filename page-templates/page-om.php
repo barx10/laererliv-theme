@@ -20,17 +20,6 @@ get_header(); ?>
       <?php while ( have_posts() ) : the_post(); ?>
         <?php the_content(); ?>
       <?php endwhile; ?>
-      <span id="kontakt" aria-hidden="true"></span>
-      <?php $epost = get_theme_mod( 'laererliv_footer_email', 'kenneth@laererliv.no' );
-      if ( $epost ) : ?>
-      <div class="about-contact">
-        <p class="cv-label">Kontakt</p>
-        <p>Har du spørsmål eller vil ta kontakt? Send meg en e-post.</p>
-        <a class="download-btn" href="mailto:<?php echo esc_attr( antispambot( $epost ) ); ?>">
-          <?php echo esc_html( antispambot( $epost ) ); ?>
-        </a>
-      </div>
-      <?php endif; ?>
     </div>
     <div class="about-sidebar">
 

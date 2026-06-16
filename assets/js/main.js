@@ -1,38 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   // ========================================
-  // SCROLL TIL KONTAKT (om-siden)
-  // ========================================
-  // Når siden åpnes med #kontakt i URL-en, scroll til kontaktblokken.
-  // Vi slår av browserens native scroll-restoration og anchor-scroll,
-  // venter til alt er lastet (inkl. bilder), og scroller selv.
-  if (window.location.hash === '#kontakt') {
-    if ('scrollRestoration' in history) {
-      history.scrollRestoration = 'manual';
-    }
-    // Overstyr native anchor-scroll umiddelbart
-    window.scrollTo(0, 0);
-
-    var scrollToKontakt = function () {
-      var el = document.getElementById('kontakt');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    };
-
-    if (document.readyState === 'complete') {
-      scrollToKontakt();
-    } else {
-      window.addEventListener('load', function () {
-        // Dobbel rAF for å garantere at layout er ferdig
-        requestAnimationFrame(function () {
-          requestAnimationFrame(scrollToKontakt);
-        });
-      });
-    }
-  }
-
-  // ========================================
   // HEADER SCROLL SHADOW
   // ========================================
   var header = document.getElementById('site-header');
