@@ -28,8 +28,8 @@ get_header(); ?>
       $foredrag = new WP_Query( array(
         'post_type'      => 'foredrag',
         'posts_per_page' => -1,
-        'orderby'        => 'menu_order',
-        'order'          => 'ASC',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
       ) );
       if ( $foredrag->have_posts() ) : ?>
       <div class="cv-block">
@@ -60,8 +60,8 @@ get_header(); ?>
       $manus = new WP_Query( array(
         'post_type'      => 'manuskonsulent',
         'posts_per_page' => -1,
-        'orderby'        => 'menu_order',
-        'order'          => 'ASC',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
       ) );
       if ( $manus->have_posts() ) : ?>
       <div class="cv-block">
