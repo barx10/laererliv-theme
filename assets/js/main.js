@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var appsNext = document.getElementById('apps-next');
     var appsPageCurrent = document.getElementById('apps-page-current');
     var appsPageTotal = document.getElementById('apps-page-total');
-    var appsPerPage = 3;
+    var appsPerPage = 6;
     var appsCurrentPage = 0;
 
     function getVisibleApps() {
