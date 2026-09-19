@@ -40,7 +40,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
   </div>
   <ul class="apps-list">
     <?php
-    $apps = new WP_Query( array( 'post_type' => 'app', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );
+    $apps = new WP_Query( array( 'post_type' => 'app', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC' ) );
     $app_index = 0;
     while ( $apps->have_posts() ) : $apps->the_post();
         $url      = get_post_meta( get_the_ID(), '_app_url', true );
