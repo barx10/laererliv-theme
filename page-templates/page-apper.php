@@ -7,7 +7,7 @@ get_header(); ?>
 <div class="page-header page-header--tall">
   <div class="page-header-inner">
     <div>
-      <p class="page-eyebrow page-anim" style="animation-delay:.1s">Digitale verktoey</p>
+      <p class="page-eyebrow page-anim" style="animation-delay:.1s">Digitale verktøy</p>
       <h1 class="page-title page-anim" style="animation-delay:.25s">Apper og <em>nettsider</em></h1>
     </div>
     <p class="page-intro page-anim" style="animation-delay:.4s"><?php echo esc_html( get_theme_mod( 'laererliv_apper_intro', 'Verktøy, apper og nettsider Kenneth har laget eller anbefaler for lærere.' ) ); ?></p>
