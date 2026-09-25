@@ -26,6 +26,10 @@
     <div class="article-meta">
       <div class="article-author">
         <span class="article-author-name"><?php the_author(); ?></span>
+        <?php $author_role = get_theme_mod( 'laererliv_hero_role', 'Lektor · Skribent · Foredragsholder' ); ?>
+        <?php if ( $author_role ) : ?>
+          <span class="article-author-role"><?php echo esc_html( $author_role ); ?></span>
+        <?php endif; ?>
       </div>
       <div class="article-meta-divider"></div>
       <span class="article-date"><?php echo laererliv_norsk_dato(); ?></span>
