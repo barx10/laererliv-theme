@@ -378,6 +378,7 @@ function laererliv_app_meta_box( $post ) {
     $url       = get_post_meta( $post->ID, '_app_url', true );
     $emoji     = get_post_meta( $post->ID, '_app_emoji', true );
     $ikon_url  = get_post_meta( $post->ID, '_app_ikon_url', true );
+    $video_url = get_post_meta( $post->ID, '_app_video_url', true );
     ?>
     <p>
         <label><strong>Lenke til app/nettside:</strong></label><br>
@@ -404,7 +405,26 @@ function laererliv_app_meta_box( $post ) {
         <input type="text" name="_app_emoji" value="<?php echo esc_attr( $emoji ); ?>" style="width:100px;" placeholder="🔗">
         <br><small>Brukes som fallback hvis ikke bilde er valgt. Standard: 🔗</small>
     </p>
+    <p>
+        <label><strong>YouTube-video:</strong></label><br>
+        <input type="url" name="_app_video_url" value="<?php echo esc_url( $video_url ); ?>" style="width:100%;" placeholder="https://www.youtube.com/watch?v=...">
+        <?php if ( $video_url && ! laererliv_youtube_id( $video_url ) ) : ?>
+            <br><small style="color:#B8965A;">⚠ Fant ikke video-ID i lenken — bruk en vanlig YouTube-lenke</small>
+        <?php else : ?>
+            <br><small>Valgfritt — gir en «Se video»-knapp på app-kortet.</small>
+        <?php endif; ?>
+    </p>
     <?php
+}
+
+/**
+ * Henter video-ID fra en YouTube-lenke (watch, youtu.be, shorts, embed).
+ */
+function laererliv_youtube_id( $url ) {
+    if ( preg_match( '~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/))([A-Za-z0-9_-]{11})~', $url, $m ) ) {
+        return $m[1];
+    }
+    return '';
 }
 
 function laererliv_pub_meta_box( $post ) {
@@ -513,6 +533,7 @@ function laererliv_save_meta( $post_id ) {
         if ( isset( $_POST['_app_url'] ) ) update_post_meta( $post_id, '_app_url', esc_url_raw( $_POST['_app_url'] ) );
         if ( isset( $_POST['_app_emoji'] ) ) update_post_meta( $post_id, '_app_emoji', sanitize_text_field( $_POST['_app_emoji'] ) );
         if ( isset( $_POST['_app_ikon_url'] ) ) update_post_meta( $post_id, '_app_ikon_url', esc_url_raw( $_POST['_app_ikon_url'] ) );
+        if ( isset( $_POST['_app_video_url'] ) ) update_post_meta( $post_id, '_app_video_url', esc_url_raw( $_POST['_app_video_url'] ) );
     }
 
     // Publikasjon

@@ -46,6 +46,7 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
         $url      = get_post_meta( get_the_ID(), '_app_url', true );
         $emoji    = get_post_meta( get_the_ID(), '_app_emoji', true );
         $ikon_url = get_post_meta( get_the_ID(), '_app_ikon_url', true );
+        $video_id = laererliv_youtube_id( get_post_meta( get_the_ID(), '_app_video_url', true ) );
         $terms    = get_the_terms( get_the_ID(), 'app_kategori' );
         $cat_slug = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->slug : '';
         $cat_name_app = ( $terms && ! is_wp_error( $terms ) ) ? $terms[0]->name : '';
@@ -63,13 +64,23 @@ if ( ! empty( $app_cats ) && ! is_wp_error( $app_cats ) ) : ?>
         <p class="app-title"><?php the_title(); ?></p>
         <div class="app-desc"><?php echo wp_kses_post( get_the_content() ); ?></div>
       </div>
-      <?php if ( $url ) : ?>
-        <a class="app-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Besøk &rarr;</a>
-      <?php endif; ?>
+      <div class="app-actions">
+        <?php if ( $video_id ) : ?>
+          <button type="button" class="app-link app-video-btn" data-video-id="<?php echo esc_attr( $video_id ); ?>" data-video-title="<?php the_title_attribute(); ?>">&#9654; Se video</button>
+        <?php endif; ?>
+        <?php if ( $url ) : ?>
+          <a class="app-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Besøk &rarr;</a>
+        <?php endif; ?>
+      </div>
     </li>
     <?php $app_index++; endwhile; wp_reset_postdata(); ?>
   </ul>
 </section>
+
+<dialog class="video-modal" id="video-modal" aria-label="Video">
+  <button type="button" class="video-modal-close" aria-label="Lukk video">&times;</button>
+  <div class="video-modal-frame"></div>
+</dialog>
 
 <?php
 $lokale = new WP_Query( array( 'post_type' => 'lokalt-prosjekt', 'posts_per_page' => -1, 'orderby' => 'menu_order', 'order' => 'ASC' ) );

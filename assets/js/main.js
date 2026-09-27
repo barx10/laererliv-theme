@@ -280,6 +280,30 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
+  // APP-VIDEO (YouTube i dialog)
+  // ========================================
+  const videoModal = document.getElementById('video-modal');
+  if (videoModal) {
+    const videoFrame = videoModal.querySelector('.video-modal-frame');
+
+    document.querySelectorAll('.app-video-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(btn.dataset.videoId) + '?autoplay=1&rel=0';
+        iframe.title = btn.dataset.videoTitle || 'Video';
+        iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+        iframe.allowFullscreen = true;
+        videoFrame.replaceChildren(iframe);
+        videoModal.showModal();
+      });
+    });
+
+    videoModal.querySelector('.video-modal-close').addEventListener('click', () => videoModal.close());
+    videoModal.addEventListener('click', e => { if (e.target === videoModal) videoModal.close(); });
+    videoModal.addEventListener('close', () => videoFrame.replaceChildren());
+  }
+
+  // ========================================
   // PROSJEKT PAGINERING (lokale prosjekter, 3 og 3)
   // ========================================
   var projPagNav = document.getElementById('projects-pagination-nav');
