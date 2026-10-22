@@ -97,78 +97,54 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
-  // PODCAST CAROUSEL (publikasjoner)
+  // PODKAST: avspilleren lastes først ved klikk (publikasjoner)
   // ========================================
-  var carousel = document.getElementById('podcast-carousel');
-  if (carousel) {
-    var track = carousel.querySelector('.podcast-carousel-track');
-    // Find all embed wrappers (wp-block-embed) or standalone iframes
-    var embeds = track.querySelectorAll('.wp-block-embed, figure.wp-block-embed, iframe');
-    var slides = [];
+  var podcastBtns = document.querySelectorAll('.podcast-play');
+  if (podcastBtns.length) {
+    var stopEpisode = function (btn) {
+      var item = btn.closest('.podcast-item');
+      item.classList.remove('playing');
+      item.querySelector('.podcast-player').replaceChildren();
+      btn.setAttribute('aria-expanded', 'false');
+      btn.innerHTML = '&#9654;';
+    };
 
-    if (embeds.length > 0) {
-      // Group: each embed + any preceding siblings (headings, paragraphs) = one slide
-      var children = Array.from(track.children);
-      var groups = [];
-      var currentGroup = [];
+    podcastBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.closest('.podcast-item');
+        if (item.classList.contains('playing')) { stopEpisode(btn); return; }
 
-      children.forEach(function (child) {
-        var isEmbed = child.classList.contains('wp-block-embed') || child.tagName === 'IFRAME';
-        if (isEmbed) {
-          currentGroup.push(child);
-          groups.push(currentGroup);
-          currentGroup = [];
-        } else {
-          currentGroup.push(child);
-        }
+        // Bare én avspiller om gangen
+        podcastBtns.forEach(function (other) {
+          if (other !== btn && other.closest('.podcast-item').classList.contains('playing')) stopEpisode(other);
+        });
+
+        var iframe = document.createElement('iframe');
+        iframe.src = btn.dataset.embedSrc;
+        iframe.title = btn.dataset.embedTitle || 'Podkast';
+        iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+        iframe.height = 152;
+        iframe.loading = 'eager';
+        item.querySelector('.podcast-player').replaceChildren(iframe);
+        item.classList.add('playing');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.innerHTML = '&#10005;';
       });
-      // Leftover non-embed nodes at the end (unlikely but safe)
-      if (currentGroup.length) groups.push(currentGroup);
+    });
+  }
 
-      // Wrap each group in a podcast-slide div
-      track.innerHTML = '';
-      groups.forEach(function (group, i) {
-        var slide = document.createElement('div');
-        slide.className = 'podcast-slide' + (i === 0 ? ' active' : '');
-        slide.setAttribute('data-slide', i);
-        group.forEach(function (el) { slide.appendChild(el); });
-        track.appendChild(slide);
+  // Skjul årsgrupper uten treff når publikasjoner filtreres
+  var pubGroups = document.querySelectorAll('.pub-year-group');
+  if (pubGroups.length) {
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setTimeout(function () {
+          pubGroups.forEach(function (group) {
+            group.hidden = !group.querySelector('.pub-item:not(.hiding)');
+          });
+        }, 0);
       });
-
-      slides = track.querySelectorAll('.podcast-slide');
-    }
-
-    var prevBtn = carousel.querySelector('.podcast-prev');
-    var nextBtn = carousel.querySelector('.podcast-next');
-    var counter = document.getElementById('podcast-current');
-    var total = document.getElementById('podcast-total');
-    var current = 0;
-
-    if (total) total.textContent = slides.length;
-    if (slides.length <= 1) {
-      var nav = carousel.querySelector('.podcast-nav');
-      if (nav) nav.style.display = 'none';
-    }
-
-    function showSlide(index) {
-      slides.forEach(function (s) { s.classList.remove('active'); });
-      slides[index].classList.add('active');
-      current = index;
-      if (counter) counter.textContent = index + 1;
-      if (prevBtn) prevBtn.disabled = index === 0;
-      if (nextBtn) nextBtn.disabled = index === slides.length - 1;
-    }
-
-    if (prevBtn) {
-      prevBtn.addEventListener('click', function () {
-        if (current > 0) showSlide(current - 1);
-      });
-    }
-    if (nextBtn) {
-      nextBtn.addEventListener('click', function () {
-        if (current < slides.length - 1) showSlide(current + 1);
-      });
-    }
+    });
   }
 
   // ========================================

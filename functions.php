@@ -646,6 +646,67 @@ function laererliv_norsk_maaned( $month_num ) {
 /**
  * Norsk datoformat: "22. februar 2026"
  */
+/**
+ * Gjør publiseringsdatoen (fritekst, f.eks. «24. september, 2024» eller «15. mars 2024»)
+ * om til Y-m-d for sortering. Faller tilbake på innleggsdatoen.
+ */
+function laererliv_pub_sorteringsdato( $post_id ) {
+    $dato = strtolower( trim( (string) get_post_meta( $post_id, '_pub_dato', true ) ) );
+    if ( $dato ) {
+        $maaneder = array_flip( array_map( function ( $m ) { return laererliv_norsk_maaned( $m ); }, range( 1, 12 ) ) );
+        if ( preg_match( '/(\d{1,2})\.?\s*([a-zæøå]+)\.?,?\s*(\d{4})/u', $dato, $m ) ) {
+            foreach ( $maaneder as $navn => $i ) {
+                if ( strpos( $navn, $m[2] ) === 0 || strpos( $m[2], substr( $navn, 0, 3 ) ) === 0 ) {
+                    return sprintf( '%04d-%02d-%02d', $m[3], $i + 1, $m[1] );
+                }
+            }
+        }
+        if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $dato ) ) return $dato;
+        if ( preg_match( '/\b(\d{4})\b/', $dato, $m ) ) return $m[1] . '-01-01';
+    }
+    return get_the_date( 'Y-m-d', $post_id );
+}
+
+/**
+ * Skiller ut sjangeren når den står bakerst i tittelen, f.eks. «Hvor er de nå? Intervju».
+ * Returnerer array( tittel, sjanger ). Sjanger er tom hvis tittelen ikke slutter på en kjent sjanger.
+ */
+function laererliv_pub_sjanger( $tittel ) {
+    $sjangre = array( 'Intervju', 'Reportasje', 'Kronikk', 'Debattinnlegg', 'Leserinnlegg', 'Kommentar', 'Artikkel', 'Fagartikkel', 'Essay', 'Anmeldelse', 'Novelle', 'Dikt', 'Skjønnlitterært innlegg', 'Skjønnlitteratur', 'Masteroppgave', 'Bacheloroppgave', 'Podkast' );
+    $monster = implode( '|', array_map( function ( $s ) { return preg_quote( $s, '/' ); }, $sjangre ) );
+    if ( preg_match( '/^(.+?[.?!])\s+(' . $monster . ')\.?$/iu', trim( $tittel ), $m ) ) {
+        return array( rtrim( $m[1], '.' ), $m[2] );
+    }
+    return array( $tittel, '' );
+}
+
+/**
+ * Henter podkastepisodene fra sideinnholdet: hver overskrift etterfulgt av en innebygd avspiller.
+ * Returnerer array av array( tittel, src, kilde ). Tom hvis innholdet ikke har avspillere.
+ */
+function laererliv_podkast_episoder( $html ) {
+    $episoder   = array();
+    $overskrift = '';
+    preg_match_all( '~<h[2-6][^>]*>(.*?)</h[2-6]>|<iframe\b([^>]*)>~is', $html, $treff, PREG_SET_ORDER );
+    foreach ( $treff as $t ) {
+        if ( ! empty( $t[1] ) ) {
+            $overskrift = trim( wp_strip_all_tags( $t[1] ) );
+            continue;
+        }
+        if ( empty( $t[2] ) || ! preg_match( '/\bsrc="([^"]+)"/i', $t[2], $src ) ) continue;
+        $src   = html_entity_decode( $src[1] );
+        $vert  = (string) wp_parse_url( $src, PHP_URL_HOST );
+        $tittel = $overskrift;
+        if ( ! $tittel && preg_match( '/\btitle="([^"]+)"/i', $t[2], $ti ) ) {
+            $tittel = preg_replace( '/^Spotify Embed:\s*/i', '', html_entity_decode( $ti[1] ) );
+        }
+        $kilde = strpos( $vert, 'spotify' ) !== false ? 'Spotify' : ( strpos( $vert, 'youtube' ) !== false ? 'YouTube' : ( strpos( $vert, 'apple' ) !== false ? 'Apple Podcasts' : '' ) );
+        $episoder[]  = array( 'tittel' => $tittel, 'src' => $src, 'kilde' => $kilde );
+        $overskrift  = '';
+    }
+    return $episoder;
+}
+
 function laererliv_norsk_dato( $post_id = null ) {
     $timestamp = get_the_time( 'U', $post_id );
     $dag       = date( 'j', $timestamp );
