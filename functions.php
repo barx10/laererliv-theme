@@ -110,7 +110,7 @@ add_filter( 'use_block_editor_for_post_type', 'laererliv_disable_gutenberg_for_c
 function laererliv_scripts() {
     // Google Fonts
     wp_enqueue_style( 'google-fonts',
-        'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@300;400;500&display=swap',
+        'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500&display=swap',
         array(), null
     );
 
@@ -127,6 +127,40 @@ function laererliv_scripts() {
     ) );
 }
 add_action( 'wp_enqueue_scripts', 'laererliv_scripts' );
+
+// ========================================
+// YTELSE
+// ========================================
+// Åpne forbindelsen til fontfil-serveren tidlig, så fontene ikke venter på CSS-en fra Google.
+add_filter( 'wp_resource_hints', function ( $urls, $relation_type ) {
+    if ( 'preconnect' === $relation_type ) {
+        $urls[] = array( 'href' => 'https://fonts.googleapis.com' );
+        $urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' );
+    }
+    return $urls;
+}, 10, 2 );
+
+// Emoji-skriptet fra WordPress-kjernen er unødvendig; nettlesere viser emoji selv.
+remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+remove_action( 'wp_print_styles', 'print_emoji_styles' );
+remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+remove_action( 'admin_print_styles', 'print_emoji_styles' );
+remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+add_filter( 'emoji_svg_url', '__return_false' );
+
+// Last bare CSS for blokkene som faktisk brukes på siden, i stedet for hele wp-block-library i <head>.
+add_filter( 'should_load_separate_core_block_assets', '__return_true' );
+
+// Lag WebP-versjoner av nye opplastede JPEG- og PNG-bilder (gjelder bildestørrelsene WordPress genererer).
+add_filter( 'image_editor_output_format', function ( $formats ) {
+    if ( wp_image_editor_supports( array( 'mime_type' => 'image/webp' ) ) ) {
+        $formats['image/jpeg'] = 'image/webp';
+        $formats['image/png']  = 'image/webp';
+    }
+    return $formats;
+} );
 
 // ========================================
 // CUSTOM POST TYPES
