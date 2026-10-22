@@ -437,7 +437,7 @@ function laererliv_app_meta_box( $post ) {
         <input type="hidden" id="app_ikon_url" name="_app_ikon_url" value="<?php echo esc_url( $ikon_url ); ?>">
         <button type="button" class="button" id="app_velg_ikon">🖼 Velg bilde</button>
         <button type="button" class="button" id="app_fjern_ikon" style="<?php echo $ikon_url ? '' : 'display:none;'; ?>">Fjern bilde</button>
-        <br><small>Valgfritt — vises som ikon på app-kortet. Ellers brukes emoji nedenfor.</small>
+        <br><small>Valgfritt — vises som bilde på app-kortet hvis appen ikke har fremhevet bilde. Ellers brukes emoji nedenfor.</small>
     </p>
     <p>
         <label><strong>Ikon (emoji):</strong></label><br>
@@ -460,20 +460,23 @@ function laererliv_app_meta_box( $post ) {
  * Henter video-ID fra en YouTube-lenke (watch, youtu.be, shorts, embed).
  */
 /**
- * Bildeflaten på et app-kort: skjermbilde (fremhevet bilde), ellers ikon eller emoji.
+ * Bildeflaten på et app-kort: fremhevet bilde, ellers bildet fra «Ikon/bilde», ellers emoji.
+ * Begge bildene fyller hele flaten, så kortene blir like store.
  */
 function laererliv_app_media( $size, $is_featured = false ) {
     $ikon_url = get_post_meta( get_the_ID(), '_app_ikon_url', true );
     $emoji    = get_post_meta( get_the_ID(), '_app_emoji', true );
-    if ( has_post_thumbnail() ) {
-        the_post_thumbnail( $size, array(
-            'alt'      => get_the_title(),
-            'loading'  => $is_featured ? 'eager' : 'lazy',
-            'decoding' => 'async',
-            'sizes'    => $is_featured ? '(max-width: 1024px) 100vw, 55vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
-        ) );
+    $attr     = array(
+        'alt'      => get_the_title(),
+        'loading'  => $is_featured ? 'eager' : 'lazy',
+        'decoding' => 'async',
+        'sizes'    => $is_featured ? '(max-width: 1024px) 100vw, 55vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+    );
+    $bilde_id = has_post_thumbnail() ? get_post_thumbnail_id() : ( $ikon_url ? attachment_url_to_postid( $ikon_url ) : 0 );
+    if ( $bilde_id ) {
+        echo wp_get_attachment_image( $bilde_id, $size, false, $attr );
     } elseif ( $ikon_url ) {
-        echo '<span class="app-thumb"><img src="' . esc_url( $ikon_url ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy" decoding="async"></span>';
+        echo '<img src="' . esc_url( $ikon_url ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="' . esc_attr( $attr['loading'] ) . '" decoding="async">';
     } else {
         echo '<span class="app-icon" aria-hidden="true">' . esc_html( $emoji ?: '🔗' ) . '</span>';
     }
