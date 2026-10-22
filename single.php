@@ -50,7 +50,11 @@
 <?php if ( has_post_thumbnail() ) : ?>
 <div class="article-image">
   <div class="article-image-inner">
-    <?php the_post_thumbnail( 'full' ); ?>
+    <?php the_post_thumbnail( 'full', array(
+        'sizes'         => '(max-width: 1400px) 100vw, 1400px',
+        'loading'       => 'eager',
+        'fetchpriority' => 'high',
+    ) ); ?>
   </div>
 </div>
 <?php endif; ?>

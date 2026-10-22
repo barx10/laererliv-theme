@@ -13,8 +13,20 @@
   </div>
   <div class="hero-portrait">
     <?php $hero_img = get_theme_mod( 'laererliv_hero_image' );
-    if ( $hero_img ) : ?>
-      <img class="hero-portrait-img" src="<?php echo esc_url( $hero_img ); ?>" alt="<?php echo esc_attr( get_theme_mod( 'laererliv_hero_name', 'Kenneth Bareksten' ) ); ?>">
+    $hero_alt = get_theme_mod( 'laererliv_hero_name', 'Kenneth Bareksten' );
+    $hero_id  = $hero_img ? attachment_url_to_postid( $hero_img ) : 0;
+    if ( $hero_id ) :
+      // Portrettet er LCP-elementet: last det straks, med høy prioritet og i riktig størrelse via srcset.
+      echo wp_get_attachment_image( $hero_id, 'full', false, array(
+          'class'         => 'hero-portrait-img',
+          'alt'           => $hero_alt,
+          'sizes'         => '(max-width: 1024px) 100vw, 50vw',
+          'loading'       => 'eager',
+          'fetchpriority' => 'high',
+          'decoding'      => 'async',
+      ) );
+    elseif ( $hero_img ) : ?>
+      <img class="hero-portrait-img" src="<?php echo esc_url( $hero_img ); ?>" alt="<?php echo esc_attr( $hero_alt ); ?>" fetchpriority="high">
     <?php else : ?>
       <div class="hero-portrait-svg"></div>
     <?php endif; ?>
@@ -27,7 +39,7 @@
 </section>
 
 <?php
-$featured = new WP_Query( array( 'posts_per_page' => 1, 'post_status' => 'publish' ) );
+$featured = new WP_Query( array( 'posts_per_page' => 1, 'post_status' => 'publish', 'no_found_rows' => true ) );
 if ( $featured->have_posts() ) : $featured->the_post();
     $cats = get_the_category();
     $cat_name = ! empty( $cats ) ? $cats[0]->name : '';
@@ -40,7 +52,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
     <a class="hero-cta" href="<?php the_permalink(); ?>">Les videre &rarr;</a>
   </div>
   <div class="featured-img">
-    <?php if ( has_post_thumbnail() ) the_post_thumbnail( 'featured-large', array( 'alt' => get_the_title() ) ); ?>
+    <?php if ( has_post_thumbnail() ) the_post_thumbnail( 'featured-large', array( 'alt' => get_the_title(), 'loading' => 'lazy', 'fetchpriority' => 'low', 'decoding' => 'async' ) ); ?>
     <?php if ( $cat_name ) : ?><span class="featured-img-label"><?php echo esc_html( $cat_name ); ?></span><?php endif; ?>
   </div>
 </section>
@@ -49,7 +61,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
 <div class="section-header reveal"><h2><?php echo esc_html( get_theme_mod( 'laererliv_random_heading', 'Tilfeldig utvalg' ) ); ?></h2></div>
 <div class="posts-grid reveal">
   <?php
-  $random = new WP_Query( array( 'posts_per_page' => 3, 'orderby' => 'rand', 'post_status' => 'publish', 'offset' => 1 ) );
+  $random = new WP_Query( array( 'posts_per_page' => 3, 'orderby' => 'rand', 'post_status' => 'publish', 'offset' => 1, 'no_found_rows' => true ) );
   while ( $random->have_posts() ) : $random->the_post();
       get_template_part( 'template-parts/post-card' );
   endwhile; wp_reset_postdata(); ?>
@@ -77,7 +89,7 @@ if ( $featured->have_posts() ) : $featured->the_post();
   </div>
   <ul class="archive-post-list">
     <?php
-    $archive = new WP_Query( array( 'posts_per_page' => -1, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC' ) );
+    $archive = new WP_Query( array( 'posts_per_page' => -1, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC', 'no_found_rows' => true, 'update_post_meta_cache' => false ) );
     while ( $archive->have_posts() ) : $archive->the_post();
         $cats = get_the_category();
         $cat_name = ! empty( $cats ) ? $cats[0]->name : '';
