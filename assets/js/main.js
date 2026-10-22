@@ -203,80 +203,33 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ========================================
-  // APP PAGINERING (apper, 3 og 3)
+  // APPER: VIS FLERE (de første 9, resten bak knapp)
   // ========================================
-  var appsPagNav = document.getElementById('apps-pagination-nav');
-  if (appsPagNav) {
+  var appsMore = document.querySelector('.apps-more');
+  if (appsMore) {
     var appsList = document.querySelector('.apps-list');
-    var appsPrev = document.getElementById('apps-prev');
-    var appsNext = document.getElementById('apps-next');
-    var appsPageCurrent = document.getElementById('apps-page-current');
-    var appsPageTotal = document.getElementById('apps-page-total');
-    var appsPerPage = 6;
-    var appsCurrentPage = 0;
+    var appsLimit = 9;
+    var appsExpanded = false;
 
-    function getVisibleApps() {
-      return Array.from(appsList.querySelectorAll('.app-item:not(.hiding)'));
-    }
-
-    function showAppsPage(page) {
-      var visible = getVisibleApps();
-      var totalPages = Math.ceil(visible.length / appsPerPage);
-      if (page < 0) page = 0;
-      if (page >= totalPages) page = totalPages - 1;
-      appsCurrentPage = page;
-
+    function applyAppsLimit() {
+      var visible = Array.from(appsList.querySelectorAll('.app-item:not(.hiding)'));
       visible.forEach(function (item, i) {
-        var inPage = i >= page * appsPerPage && i < (page + 1) * appsPerPage;
-        item.classList.toggle('page-hidden', !inPage);
+        item.classList.toggle('over-limit', !appsExpanded && i >= appsLimit);
       });
-
-      if (appsPageCurrent) appsPageCurrent.textContent = page + 1;
-      if (appsPageTotal) appsPageTotal.textContent = totalPages || 1;
-      if (appsPrev) appsPrev.disabled = page === 0;
-      if (appsNext) appsNext.disabled = page >= totalPages - 1;
-
-      if (totalPages > 1) {
-        appsPagNav.style.display = 'flex';
-      } else {
-        appsPagNav.style.display = 'none';
-      }
+      appsMore.hidden = appsExpanded || visible.length <= appsLimit;
     }
 
-    if (appsPrev) appsPrev.addEventListener('click', function () { showAppsPage(appsCurrentPage - 1); });
-    if (appsNext) appsNext.addEventListener('click', function () { showAppsPage(appsCurrentPage + 1); });
-
-    // Mål alle sider og lås min-height til den høyeste
-    function lockAppsHeight() {
-      appsList.style.minHeight = '';
-      var visible = getVisibleApps();
-      var totalPages = Math.ceil(visible.length / appsPerPage);
-      var maxH = 0;
-      for (var p = 0; p < totalPages; p++) {
-        visible.forEach(function (item, i) {
-          var inPage = i >= p * appsPerPage && i < (p + 1) * appsPerPage;
-          item.classList.toggle('page-hidden', !inPage);
-        });
-        var h = appsList.offsetHeight;
-        if (h > maxH) maxH = h;
-      }
-      appsList.style.minHeight = maxH + 'px';
-      // Gå tilbake til nåværende side etter måling
-      showAppsPage(appsCurrentPage);
-    }
-
-    // Reset til side 1 når filter klikkes
-    document.querySelectorAll('.filter-btn').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        setTimeout(function () {
-          showAppsPage(0);
-          requestAnimationFrame(lockAppsHeight);
-        }, 0);
-      });
+    appsMore.addEventListener('click', function () {
+      appsExpanded = true;
+      applyAppsLimit();
     });
 
-    showAppsPage(0);
-    requestAnimationFrame(lockAppsHeight);
+    // Filteret setter .hiding først, så teller vi på nytt
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () { setTimeout(applyAppsLimit, 0); });
+    });
+
+    applyAppsLimit();
   }
 
   // ========================================
@@ -301,44 +254,6 @@ document.addEventListener('DOMContentLoaded', function () {
     videoModal.querySelector('.video-modal-close').addEventListener('click', () => videoModal.close());
     videoModal.addEventListener('click', e => { if (e.target === videoModal) videoModal.close(); });
     videoModal.addEventListener('close', () => videoFrame.replaceChildren());
-  }
-
-  // ========================================
-  // PROSJEKT PAGINERING (lokale prosjekter, 3 og 3)
-  // ========================================
-  var projPagNav = document.getElementById('projects-pagination-nav');
-  if (projPagNav) {
-    var projList = document.querySelector('.projects-list');
-    var projPrev = document.getElementById('projects-prev');
-    var projNext = document.getElementById('projects-next');
-    var projPageCurrent = document.getElementById('projects-page-current');
-    var projPageTotal = document.getElementById('projects-page-total');
-    var projPerPage = 3;
-    var projCurrentPage = 0;
-    var allProjects = Array.from(projList.querySelectorAll('.project-item'));
-    var projTotalPages = Math.ceil(allProjects.length / projPerPage);
-
-    function showProjectsPage(page) {
-      if (page < 0) page = 0;
-      if (page >= projTotalPages) page = projTotalPages - 1;
-      projCurrentPage = page;
-
-      allProjects.forEach(function (item, i) {
-        var inPage = i >= page * projPerPage && i < (page + 1) * projPerPage;
-        item.classList.toggle('page-hidden', !inPage);
-      });
-
-      if (projPageCurrent) projPageCurrent.textContent = page + 1;
-      if (projPageTotal) projPageTotal.textContent = projTotalPages;
-      if (projPrev) projPrev.disabled = page === 0;
-      if (projNext) projNext.disabled = page >= projTotalPages - 1;
-    }
-
-    if (projPrev) projPrev.addEventListener('click', function () { showProjectsPage(projCurrentPage - 1); });
-    if (projNext) projNext.addEventListener('click', function () { showProjectsPage(projCurrentPage + 1); });
-
-    if (projTotalPages > 1) projPagNav.style.display = 'flex';
-    showProjectsPage(0);
   }
 
   // ========================================

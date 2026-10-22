@@ -255,7 +255,7 @@ function laererliv_register_post_types() {
         'has_archive'  => false,
         'rewrite'      => false,
         'menu_icon'    => 'dashicons-editor-code',
-        'supports'     => array( 'title', 'editor', 'page-attributes' ),
+        'supports'     => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
         'show_in_rest' => true,
     ) );
 
@@ -413,7 +413,12 @@ function laererliv_app_meta_box( $post ) {
     $emoji     = get_post_meta( $post->ID, '_app_emoji', true );
     $ikon_url  = get_post_meta( $post->ID, '_app_ikon_url', true );
     $video_url = get_post_meta( $post->ID, '_app_video_url', true );
+    $utvalgt   = get_post_meta( $post->ID, '_app_utvalgt', true );
     ?>
+    <p>
+        <label><input type="checkbox" name="_app_utvalgt" value="1" <?php checked( $utvalgt, '1' ); ?>> <strong>Utvalgt app</strong></label>
+        <br><small>Vises stort øverst på siden «Apper og nettsider». Er flere huket av, brukes den nyeste. Er ingen huket av, brukes den nyeste appen.</small>
+    </p>
     <p>
         <label><strong>Lenke til app/nettside:</strong></label><br>
         <input type="url" id="app_url" name="_app_url" value="<?php echo esc_url( $url ); ?>" style="width:100%;" placeholder="https://eksempel.no">
@@ -454,6 +459,26 @@ function laererliv_app_meta_box( $post ) {
 /**
  * Henter video-ID fra en YouTube-lenke (watch, youtu.be, shorts, embed).
  */
+/**
+ * Bildeflaten på et app-kort: skjermbilde (fremhevet bilde), ellers ikon eller emoji.
+ */
+function laererliv_app_media( $size, $is_featured = false ) {
+    $ikon_url = get_post_meta( get_the_ID(), '_app_ikon_url', true );
+    $emoji    = get_post_meta( get_the_ID(), '_app_emoji', true );
+    if ( has_post_thumbnail() ) {
+        the_post_thumbnail( $size, array(
+            'alt'      => get_the_title(),
+            'loading'  => $is_featured ? 'eager' : 'lazy',
+            'decoding' => 'async',
+            'sizes'    => $is_featured ? '(max-width: 1024px) 100vw, 55vw' : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw',
+        ) );
+    } elseif ( $ikon_url ) {
+        echo '<span class="app-thumb"><img src="' . esc_url( $ikon_url ) . '" alt="' . esc_attr( get_the_title() ) . '" loading="lazy" decoding="async"></span>';
+    } else {
+        echo '<span class="app-icon" aria-hidden="true">' . esc_html( $emoji ?: '🔗' ) . '</span>';
+    }
+}
+
 function laererliv_youtube_id( $url ) {
     if ( preg_match( '~(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/))([A-Za-z0-9_-]{11})~', $url, $m ) ) {
         return $m[1];
@@ -568,6 +593,7 @@ function laererliv_save_meta( $post_id ) {
         if ( isset( $_POST['_app_emoji'] ) ) update_post_meta( $post_id, '_app_emoji', sanitize_text_field( $_POST['_app_emoji'] ) );
         if ( isset( $_POST['_app_ikon_url'] ) ) update_post_meta( $post_id, '_app_ikon_url', esc_url_raw( $_POST['_app_ikon_url'] ) );
         if ( isset( $_POST['_app_video_url'] ) ) update_post_meta( $post_id, '_app_video_url', esc_url_raw( $_POST['_app_video_url'] ) );
+        update_post_meta( $post_id, '_app_utvalgt', isset( $_POST['_app_utvalgt'] ) ? '1' : '' );
     }
 
     // Publikasjon
