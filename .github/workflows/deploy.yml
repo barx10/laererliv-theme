@@ -1,0 +1,56 @@
+# Laster opp temaet til one.com via SFTP hver gang noe flettes inn i main.
+# Krever disse hemmelighetene i GitHub (Settings → Secrets and variables → Actions):
+#   SFTP_HOST        f.eks. ssh.xxxxx.service.one
+#   SFTP_USER        f.eks. xxxxx_ssh
+#   SFTP_PASSWORD    SFTP-passordet fra one.com
+#   SFTP_REMOTE_DIR  temamappen på serveren, f.eks. /www/wp-content/themes/laererliv-theme
+name: Last opp tema til one.com
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'CLAUDE.md'
+      - '.github/**'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Installer lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Sjekk at temamappen finnes på serveren
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_REMOTE_DIR: ${{ secrets.SFTP_REMOTE_DIR }}
+        run: |
+          if ! lftp -c "set sftp:auto-confirm yes; set net:max-retries 2; open --env-password -u \"$SFTP_USER\" \"sftp://$SFTP_HOST\"; cd \"$SFTP_REMOTE_DIR\""; then
+            echo "::error::Fant ikke mappen SFTP_REMOTE_DIR på serveren. Mappene i roten er:"
+            lftp -c "set sftp:auto-confirm yes; open --env-password -u \"$SFTP_USER\" \"sftp://$SFTP_HOST\"; cls -1 /"
+            exit 1
+          fi
+
+      - name: Last opp temafilene
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+          SFTP_USER: ${{ secrets.SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.SFTP_PASSWORD }}
+          SFTP_REMOTE_DIR: ${{ secrets.SFTP_REMOTE_DIR }}
+        # Ingen sletting på serveren: filer som fjernes fra repoet blir liggende til de slettes manuelt.
+        run: |
+          lftp -c "set sftp:auto-confirm yes; set net:max-retries 2; \
+            open --env-password -u \"$SFTP_USER\" \"sftp://$SFTP_HOST\"; \
+            mirror --reverse --verbose --parallel=4 \
+              --exclude '^\.git/' --exclude '^\.github/' \
+              --exclude '^CLAUDE\.md$' --exclude '(^|/)test$' \
+              ./ \"$SFTP_REMOTE_DIR\""
