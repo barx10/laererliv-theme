@@ -108,14 +108,8 @@ add_filter( 'use_block_editor_for_post_type', 'laererliv_disable_gutenberg_for_c
 // STIL OG SKRIPT
 // ========================================
 function laererliv_scripts() {
-    // Google Fonts
-    wp_enqueue_style( 'google-fonts',
-        'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500&display=swap',
-        array(), null
-    );
-
-    // Tema-CSS
-    wp_enqueue_style( 'laererliv-style', get_stylesheet_uri(), array( 'google-fonts' ), wp_get_theme()->get( 'Version' ) );
+    // Tema-CSS (fontene ligger i temaet, se @font-face øverst i style.css)
+    wp_enqueue_style( 'laererliv-style', get_stylesheet_uri(), array(), wp_get_theme()->get( 'Version' ) );
 
     // Tema-JS
     wp_enqueue_script( 'laererliv-main', get_template_directory_uri() . '/assets/js/main.js', array(), wp_get_theme()->get( 'Version' ), true );
@@ -131,14 +125,13 @@ add_action( 'wp_enqueue_scripts', 'laererliv_scripts' );
 // ========================================
 // YTELSE
 // ========================================
-// Åpne forbindelsen til fontfil-serveren tidlig, så fontene ikke venter på CSS-en fra Google.
-add_filter( 'wp_resource_hints', function ( $urls, $relation_type ) {
-    if ( 'preconnect' === $relation_type ) {
-        $urls[] = array( 'href' => 'https://fonts.googleapis.com' );
-        $urls[] = array( 'href' => 'https://fonts.gstatic.com', 'crossorigin' );
+// Forhåndslast fontene som brukes øverst på siden, så teksten vises med riktig font med en gang.
+add_action( 'wp_head', function () {
+    $fonter = get_template_directory_uri() . '/assets/fonts/';
+    foreach ( array( 'playfair-display-latin.woff2', 'outfit-latin.woff2' ) as $fil ) {
+        echo '<link rel="preload" href="' . esc_url( $fonter . $fil ) . '" as="font" type="font/woff2" crossorigin>' . "\n";
     }
-    return $urls;
-}, 10, 2 );
+}, 1 );
 
 // Emoji-skriptet fra WordPress-kjernen er unødvendig; nettlesere viser emoji selv.
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
