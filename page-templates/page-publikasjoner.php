@@ -30,61 +30,78 @@ if ( ! empty( $pub_kilder ) && ! is_wp_error( $pub_kilder ) ) : ?>
 <section class="publications-section">
 
   <?php
-  $pubs = new WP_Query( array( 'post_type' => 'publikasjon', 'posts_per_page' => -1, 'orderby' => 'date', 'order' => 'DESC' ) );
-  if ( $pubs->have_posts() ) : ?>
-  <ul class="publications-list">
-    <?php
-    $pub_index = 0;
-    while ( $pubs->have_posts() ) : $pubs->the_post();
-        $url     = get_post_meta( get_the_ID(), '_pub_url', true );
-        $dato    = get_post_meta( get_the_ID(), '_pub_dato', true );
-        $kilder  = get_the_terms( get_the_ID(), 'pub_kilde' );
-        $kilde_slug = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->slug : '';
-        $kilde_name = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->name : '';
-    ?>
-    <li class="pub-item reveal" data-category="<?php echo esc_attr( $kilde_slug ); ?>" style="transition-delay:<?php echo $pub_index * 0.07; ?>s">
-      <?php if ( has_post_thumbnail() ) : ?>
-        <div class="pub-thumb"><?php the_post_thumbnail( 'cpt-thumb' ); ?></div>
-      <?php endif; ?>
-      <div>
-        <?php if ( $kilde_name ) : ?><p class="pub-source"><?php echo esc_html( $kilde_name ); ?></p><?php endif; ?>
-        <p class="pub-title">
-          <?php if ( $url ) : ?>
-            <a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener"><?php the_title(); ?></a>
-          <?php else : the_title(); endif; ?>
-        </p>
-        <?php if ( $dato ) : ?><span class="pub-date"><?php echo esc_html( $dato ); ?></span><?php endif; ?>
-      </div>
-      <?php if ( $url ) : ?>
-        <a class="pub-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener">Les &rarr;</a>
-      <?php endif; ?>
-    </li>
-    <?php $pub_index++; endwhile; wp_reset_postdata(); ?>
-  </ul>
-  <?php endif; ?>
+  $pubs = new WP_Query( array( 'post_type' => 'publikasjon', 'posts_per_page' => -1, 'no_found_rows' => true ) );
+
+  // Sorter etter faktisk publiseringsdato og grupper etter år
+  $pub_aar = array();
+  foreach ( $pubs->posts as $pub ) {
+      $pub->sorteringsdato = laererliv_pub_sorteringsdato( $pub->ID );
+  }
+  usort( $pubs->posts, function ( $a, $b ) { return strcmp( $b->sorteringsdato, $a->sorteringsdato ); } );
+  foreach ( $pubs->posts as $pub ) {
+      $pub_aar[ substr( $pub->sorteringsdato, 0, 4 ) ][] = $pub;
+  }
+
+  foreach ( $pub_aar as $aar => $aarets_pubs ) : ?>
+  <div class="pub-year-group reveal">
+    <h2 class="pub-year"><?php echo esc_html( $aar ); ?></h2>
+    <ul class="publications-list">
+      <?php foreach ( $aarets_pubs as $post ) : setup_postdata( $post );
+          $url     = get_post_meta( get_the_ID(), '_pub_url', true );
+          $dato    = get_post_meta( get_the_ID(), '_pub_dato', true );
+          $kilder  = get_the_terms( get_the_ID(), 'pub_kilde' );
+          $kilde_slug = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->slug : '';
+          $kilde_name = ( $kilder && ! is_wp_error( $kilder ) ) ? $kilder[0]->name : '';
+          list( $pub_tittel, $sjanger ) = laererliv_pub_sjanger( get_the_title() );
+          $merkelapp = implode( ' · ', array_filter( array( $sjanger, $kilde_name ) ) );
+      ?>
+      <li class="pub-item" data-category="<?php echo esc_attr( $kilde_slug ); ?>">
+        <?php if ( has_post_thumbnail() ) : ?>
+          <div class="pub-thumb"><?php the_post_thumbnail( 'cpt-thumb', array( 'loading' => 'lazy' ) ); ?></div>
+        <?php endif; ?>
+        <div>
+          <?php if ( $merkelapp ) : ?><p class="pub-source"><?php echo esc_html( $merkelapp ); ?></p><?php endif; ?>
+          <p class="pub-title">
+            <?php if ( $url ) : ?>
+              <a href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener"><?php echo wp_kses_post( $pub_tittel ); ?></a>
+            <?php else : echo wp_kses_post( $pub_tittel ); endif; ?>
+          </p>
+          <?php if ( $dato ) : ?><span class="pub-date"><?php echo esc_html( $dato ); ?></span><?php endif; ?>
+        </div>
+        <?php if ( $url ) : ?>
+          <a class="pub-link" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Les &rarr;</a>
+        <?php endif; ?>
+      </li>
+      <?php endforeach; wp_reset_postdata(); ?>
+    </ul>
+  </div>
+  <?php endforeach; ?>
 
   <?php
   while ( have_posts() ) : the_post();
-    $page_content = get_the_content();
-    if ( $page_content ) : ?>
+    $page_content = apply_filters( 'the_content', get_the_content() );
+    if ( trim( $page_content ) ) :
+      $episoder = laererliv_podkast_episoder( $page_content ); ?>
   <div class="pub-page-content reveal">
     <div class="section-divider">
       <p class="section-divider-label">Podkast</p>
     </div>
-    <div class="podcast-carousel" id="podcast-carousel">
-      <div class="podcast-carousel-track">
-        <?php the_content(); ?>
-      </div>
-      <div class="podcast-nav">
-        <button class="podcast-arrow podcast-prev" type="button" aria-label="Forrige episode" disabled>
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12 15l-5-5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <span class="podcast-counter"><span id="podcast-current">1</span> / <span id="podcast-total">1</span></span>
-        <button class="podcast-arrow podcast-next" type="button" aria-label="Neste episode">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M8 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </div>
+    <?php if ( $episoder ) : ?>
+    <ol class="podcast-list">
+      <?php foreach ( $episoder as $i => $ep ) : ?>
+      <li class="podcast-item">
+        <button type="button" class="podcast-play" data-embed-src="<?php echo esc_url( $ep['src'] ); ?>" data-embed-title="<?php echo esc_attr( $ep['tittel'] ); ?>" aria-expanded="false" aria-label="Spill av <?php echo esc_attr( $ep['tittel'] ); ?>">&#9654;</button>
+        <div class="podcast-info">
+          <?php if ( $ep['kilde'] ) : ?><p class="pub-source"><?php echo esc_html( $ep['kilde'] ); ?></p><?php endif; ?>
+          <h3 class="podcast-title"><?php echo esc_html( $ep['tittel'] ); ?></h3>
+        </div>
+        <div class="podcast-player"></div>
+      </li>
+      <?php endforeach; ?>
+    </ol>
+    <?php else : ?>
+    <div class="pub-embeds"><?php echo $page_content; ?></div>
+    <?php endif; ?>
   </div>
   <?php endif; endwhile; ?>
 
