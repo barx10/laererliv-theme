@@ -133,6 +133,14 @@ add_action( 'wp_head', function () {
     }
 }, 1 );
 
+// jQuery lastes av utvidelser (cookie-banneret), ikke av temaet. Flytt det til bunnen av siden
+// så det ikke blokkerer visningen. Et skript i <head> som trenger jQuery, trekker det fortsatt opp dit.
+add_action( 'wp_enqueue_scripts', function () {
+    foreach ( array( 'jquery', 'jquery-core', 'jquery-migrate' ) as $handle ) {
+        wp_scripts()->add_data( $handle, 'group', 1 );
+    }
+}, 100 );
+
 // Emoji-skriptet fra WordPress-kjernen er unødvendig; nettlesere viser emoji selv.
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
 remove_action( 'wp_print_styles', 'print_emoji_styles' );
