@@ -41,6 +41,8 @@ jobs:
             # Mappene på one.com er snarveier, så vi lister nivå for nivå med skråstrek bakerst
             for a in $(sftp_cmd "cls -1 webroots/" | sed -e 's#[@/]$##' -e 's#.*/##'); do
               echo "--- webroots/$a/:"; sftp_cmd "cls -1 webroots/$a/"
+              temaer=$(sftp_cmd "cls -1 webroots/$a/wp-content/themes/" | grep -v 'Access failed' || true)
+              if [ -n "$temaer" ]; then echo "*** Temamapper i webroots/$a/wp-content/themes/:"; echo "$temaer"; fi
               for b in $(sftp_cmd "cls -1 webroots/$a/" | sed -e 's#[@/]$##' -e 's#.*/##'); do
                 temaer=$(sftp_cmd "cls -1 webroots/$a/$b/wp-content/themes/" | grep -v 'Access failed' || true)
                 if [ -n "$temaer" ]; then echo "*** Temamapper i webroots/$a/$b/wp-content/themes/:"; echo "$temaer"; fi
