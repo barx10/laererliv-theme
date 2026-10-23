@@ -39,9 +39,9 @@ jobs:
             sftp_cmd() { lftp -c "set sftp:auto-confirm yes; open --env-password -u \"$SFTP_USER\" \"sftp://$SFTP_HOST\"; $1" 2>&1 || true; }
             echo "--- Innhold i innloggingsmappen:"; sftp_cmd "cls -1"
             # Mappene på one.com er snarveier, så vi lister nivå for nivå med skråstrek bakerst
-            for a in $(sftp_cmd "cls -1 webroots/" | sed 's#[@/]$##'); do
+            for a in $(sftp_cmd "cls -1 webroots/" | sed -e 's#[@/]$##' -e 's#.*/##'); do
               echo "--- webroots/$a/:"; sftp_cmd "cls -1 webroots/$a/"
-              for b in $(sftp_cmd "cls -1 webroots/$a/" | sed 's#[@/]$##'); do
+              for b in $(sftp_cmd "cls -1 webroots/$a/" | sed -e 's#[@/]$##' -e 's#.*/##'); do
                 temaer=$(sftp_cmd "cls -1 webroots/$a/$b/wp-content/themes/" | grep -v 'Access failed' || true)
                 if [ -n "$temaer" ]; then echo "*** Temamapper i webroots/$a/$b/wp-content/themes/:"; echo "$temaer"; fi
                 temaer=$(sftp_cmd "cls -1 webroots/$a/$b/files/wp-content/themes/" | grep -v 'Access failed' || true)
