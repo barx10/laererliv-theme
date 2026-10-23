@@ -37,11 +37,18 @@ jobs:
           if ! lftp -c "set sftp:auto-confirm yes; set net:max-retries 2; open --env-password -u \"$SFTP_USER\" \"sftp://$SFTP_HOST\"; cd \"$SFTP_REMOTE_DIR\""; then
             echo "::error::Fant ikke mappen SFTP_REMOTE_DIR på serveren. Leter etter temamapper:"
             sftp_cmd() { lftp -c "set sftp:auto-confirm yes; open --env-password -u \"$SFTP_USER\" \"sftp://$SFTP_HOST\"; $1" 2>&1 || true; }
-            echo "--- Innloggingsmappe:"; sftp_cmd "pwd"
             echo "--- Innhold i innloggingsmappen:"; sftp_cmd "cls -1"
-            for rot in /www/ /webroots/ ./; do
-              echo "--- Temamapper under $rot:"
-              sftp_cmd "find -d 5 $rot" | grep -E 'wp-content/themes/[^/]+/$' | head -20 || echo "(ingen funnet)"
+            # Mappene på one.com er snarveier, så vi lister nivå for nivå med skråstrek bakerst
+            for a in $(sftp_cmd "cls -1 webroots/" | sed -e 's#[@/]$##' -e 's#.*/##'); do
+              echo "--- webroots/$a/:"; sftp_cmd "cls -1 webroots/$a/"
+              temaer=$(sftp_cmd "cls -1 webroots/$a/wp-content/themes/" | grep -v 'Access failed' || true)
+              if [ -n "$temaer" ]; then echo "*** Temamapper i webroots/$a/wp-content/themes/:"; echo "$temaer"; fi
+              for b in $(sftp_cmd "cls -1 webroots/$a/" | sed -e 's#[@/]$##' -e 's#.*/##'); do
+                temaer=$(sftp_cmd "cls -1 webroots/$a/$b/wp-content/themes/" | grep -v 'Access failed' || true)
+                if [ -n "$temaer" ]; then echo "*** Temamapper i webroots/$a/$b/wp-content/themes/:"; echo "$temaer"; fi
+                temaer=$(sftp_cmd "cls -1 webroots/$a/$b/files/wp-content/themes/" | grep -v 'Access failed' || true)
+                if [ -n "$temaer" ]; then echo "*** Temamapper i webroots/$a/$b/files/wp-content/themes/:"; echo "$temaer"; fi
+              done
             done
             exit 1
           fi
